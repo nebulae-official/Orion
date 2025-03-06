@@ -1,0 +1,134 @@
+site_name: Nebula Orion
+site_url: https://mydomain.org/mysite
+site_author: Gishant Singh
+site_description: The Cosmic Toolkit for Social Media, AI, and Video Production
+
+# Repository
+repo_name: nebula-orion
+repo_url: https://github.com/yourusername/orion
+edit_uri: edit/main/docs/
+
+# Copyright
+copyright: Copyright &copy; 2023 - 2025 Nebula Orion
+
+# Configuration
+theme:
+  name: material
+  custom_dir: docs/overrides
+  font:
+    text: "Roboto"
+    code: "Roboto Mono"
+  palette:
+    # Acrylic-inspired palette from colorhunt.io
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: indigo
+      accent: deep purple
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: deep purple
+      accent: indigo
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+  features:
+    - navigation.instant
+    - navigation.tracking
+    - navigation.tabs
+    - navigation.tabs.sticky
+    - navigation.sections
+    - navigation.expand
+    - navigation.indexes
+    - navigation.top
+    - search.suggest
+    - search.highlight
+    - content.tabs.link
+    - content.code.copy
+    - content.code.annotate
+  icon:
+    repo: fontawesome/brands/github
+
+# Extensions
+markdown_extensions:
+  - admonition
+  - attr_list
+  - def_list
+  - footnotes
+  - md_in_html
+  - toc:
+      permalink: true
+  - pymdownx.arithmatex:
+      generic: true
+  - pymdownx.betterem:
+      smart_enable: all
+  - pymdownx.caret
+  - pymdownx.details
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.keys
+  - pymdownx.mark
+  - pymdownx.smartsymbols
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.tasklist:
+      custom_checkbox: true
+  - pymdownx.tilde
+
+# Plugins
+plugins:
+  - search
+  - mkdocstrings:
+      handlers:
+        python:
+          paths: [src]
+          options:
+            docstring_style: google
+            show_source: true
+  - git-revision-date-localized:
+      enable_creation_date: true
+  - minify:
+      minify_html: true
+
+# Extra CSS for acrylic effect
+extra_css:
+  - stylesheets/extra.css
+
+# Page tree
+nav:
+  - Home: index.md
+  - Getting Started:
+    - Installation: getting-started/installation.md
+    - Quick Start: getting-started/quick-start.md
+    - Configuration: getting-started/configuration.md
+  - Core Modules:
+    - Overview: modules/overview.md
+    - Betelgeuse - Social Media: modules/betelgeuse.md
+    - Bellatrix - AI Toolkit: modules/bellatrix.md
+    - Rigel - Video Production: modules/rigel.md
+    - Saiph - Automation: modules/saiph.md
+  - Tutorials:
+    - Basic Usage: tutorials/basic-usage.md
+    - Advanced Techniques: tutorials/advanced-techniques.md
+  - API Reference:
+    - nebula_orion: api/nebula_orion.md
+    - betelgeuse: api/betelgeuse.md
+    - bellatrix: api/bellatrix.md
+    - rigel: api/rigel.md
+    - saiph: api/saiph.md
+  - Contributing: contributing.md
+  - Roadmap: roadmap.md
+  - Changelog: changelog.md

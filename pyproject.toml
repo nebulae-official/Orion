@@ -1,0 +1,29 @@
+[project]
+name = "nebula-orion"
+version = "0.1.0"
+description = "Orion Library"
+readme = "README.md"
+license = { file = "LICENSE" }
+authors = [{ name = "Gishant", email = "khiladisngh@hotmail.com" }]
+classifiers = [
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+requires-python = ">=3.9"
+dependencies = []
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[dependency-groups]
+dev = [
+    "pytest>=8.3.5",
+    "pytest-cov>=6.0.0",
+    "pytest-sugar>=1.0.0",
+    "snakeviz>=2.2.0",
+]

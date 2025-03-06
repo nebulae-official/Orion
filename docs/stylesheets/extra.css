@@ -1,0 +1,210 @@
+/* Acrylic-inspired styling for Nebula Orion docs */
+
+/* Main container with subtle opacity */
+.md-main {
+  background-color: rgba(var(--md-default-bg-color--rgb), 0.9);
+  backdrop-filter: blur(10px);
+}
+
+/* Card styles with acrylic effect */
+.md-typeset .admonition,
+.md-typeset details {
+  border: none;
+  background-color: rgba(var(--md-default-bg-color--rgb), 0.7);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.md-typeset .admonition:hover,
+.md-typeset details:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Code blocks with acrylic effect */
+.md-typeset pre > code {
+  background-color: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(10px);
+}
+
+/* Navigation with acrylic effect */
+.md-sidebar {
+  background-color: rgba(var(--md-default-bg-color--rgb), 0.8);
+  backdrop-filter: blur(10px);
+}
+
+/* Hero section on home page */
+.hero {
+  margin: 2rem 0;
+  padding: 2.5rem;
+  border-radius: 8px;
+  background: linear-gradient(135deg, rgba(var(--md-primary-fg-color--dark-rgb), 0.7), rgba(var(--md-accent-fg-color--dark-rgb), 0.7));
+  backdrop-filter: blur(10px);
+  text-align: center;
+  color: var(--md-primary-bg-color);
+}
+
+.hero h1 {
+  margin: 0;
+  font-size: 3.5rem;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.hero p {
+  margin: 1rem 0;
+  font-size: 1.5rem;
+  opacity: 0.9;
+}
+
+/* Feature cards */
+.feature-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+  margin: 2rem 0;
+}
+
+.feature-card {
+  padding: 1.5rem;
+  border-radius: 8px;
+  background-color: rgba(var(--md-default-bg-color--rgb), 0.7);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.feature-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.feature-card h2 {
+  margin-top: 0;
+  font-size: 1.5rem;
+  color: var(--md-primary-fg-color);
+}
+
+.feature-card p {
+  margin: 1rem 0;
+  color: var(--md-default-fg-color--light);
+}
+
+/* Module cards */
+.module-card {
+  padding: 1.5rem;
+  margin: 1.5rem 0;
+  border-radius: 8px;
+  background-color: rgba(var(--md-default-bg-color--rgb), 0.7);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.module-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.module-card h2 {
+  margin-top: 0;
+  font-size: 1.8rem;
+  color: var(--md-primary-fg-color);
+}
+
+.module-card .emoji-icon {
+  font-size: 2.5rem;
+  margin-right: 0.5rem;
+  vertical-align: middle;
+}
+
+/* Button styles */
+.md-button {
+  backdrop-filter: blur(5px);
+  transition: all 0.3s ease;
+}
+
+.md-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+/* Tabs with acrylic effect */
+.md-typeset .tabbed-set > label {
+  background-color: rgba(var(--md-default-bg-color--rgb), 0.7);
+  backdrop-filter: blur(5px);
+}
+
+/* Modern tables */
+.md-typeset table:not([class]) {
+  background-color: rgba(var(--md-default-bg-color--rgb), 0.7);
+  backdrop-filter: blur(5px);
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.md-typeset table:not([class]) th {
+  background-color: rgba(var(--md-primary-fg-color--rgb), 0.8);
+  color: var(--md-primary-bg-color);
+}
+
+/* API documentation styling */
+.doc-contents {
+  padding: 1.5rem;
+  border-radius: 8px;
+  background-color: rgba(var(--md-default-bg-color--rgb), 0.7);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Footer styling */
+.md-footer {
+  background-color: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(10px);
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.1);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--md-primary-fg-color--light);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--md-primary-fg-color);
+}
+
+/* Responsive adjustments */
+@media screen and (max-width: 76.1875em) {
+  .hero h1 {
+    font-size: 2.5rem;
+  }
+
+  .hero p {
+    font-size: 1.2rem;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .feature-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .hero h1 {
+    font-size: 2rem;
+  }
+
+  .hero p {
+    font-size: 1rem;
+  }
+}
