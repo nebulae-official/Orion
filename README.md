@@ -1,4 +1,4 @@
-# ✨ Orion: The Cosmic Toolkit for Social Media, AI, and Video Production [WIP]
+# ✨ Orion: A Powerful Python Toolkit [WIP]
 ## Note: This is a placeholder README
 
 [![Python Version](https://img.shields.io/badge/python-3.9%2B-blue.svg)](https://www.python.org/downloads/)
@@ -8,14 +8,13 @@
 [![PyPI version](https://badge.fury.io/py/nebula-orion.svg)](https://badge.fury.io/py/nebula-orion)
 [![Code Style: Ruff](https://img.shields.io/badge/code%20style-ruff-000000.svg)](https://github.com/astral-sh/ruff)
 
-> 🌌 Harness the power of the stars with this comprehensive Python toolkit for social media management, AI operations, and video production automation.
+> 🌌 Harness the power of Notion with this comprehensive Python toolkit for workspace management, content organization, and automation.
 
 ## 📚 Table of Contents
 
 - [✨ Features](#-features)
 - [🛠️ Installation](#️-installation)
 - [🚀 Quick Start](#-quick-start)
-- [💫 Core Modules](#-core-modules)
 - [📖 Documentation](#-documentation)
 - [🤝 Contributing](#-contributing)
 - [🗺️ Roadmap](#️-roadmap)
@@ -23,22 +22,13 @@
 
 ## ✨ Features
 
-- 🌟 **Betelgeuse** - Advanced Social Media Management
-  - Multi-platform content scheduling
-  - Analytics and engagement tracking
-  - Automated posting and response systems
-- ⭐ **Bellatrix** - AI Toolkit
-  - Machine learning model integration
-  - Natural language processing
-  - Content optimization algorithms
-- 💫 **Rigel** - Video Production Pipeline
-  - Automated video processing
-  - Render farm management
-  - Asset organization system
-- 🌠 **Saiph** - Automated Management System
-  - Project tracking and analytics
-  - Resource allocation
-  - Workflow automation
+- 🔴 **Betelgeuse** - Comprehensive Notion Management
+  - Database creation and querying
+  - Page management and content organization
+  - Rich block support for all Notion content types
+  - Property system for flexible data structures
+  - OAuth integration for secure access
+  - Automated workspace operations
 
 ## 🛠️ Installation
 
@@ -68,47 +58,47 @@ make install
 
 ## 🚀 Quick Start
 
-### Social Media Management
+### Basic Notion Operations
 ```python
-from orion.betelgeuse import SocialMediaManager
+from nebula_orion.betelgeuse import NotionClient
 
-# Initialize the social media manager
-sm_manager = SocialMediaManager()
+# Initialize the client
+notion = NotionClient(auth_token="your-notion-api-token")
 
-# Schedule a post across platforms
-sm_manager.schedule_post(
-    content="Check out our latest update! 🚀",
-    platforms=["twitter", "linkedin"],
-    schedule_time="2024-03-15 14:00:00"
+# Create a new database
+database = notion.databases.create(
+    parent={"page_id": "your-page-id"},
+    title=[{"text": {"content": "Task Tracker"}}],
+    properties={
+        "Name": {"title": {}},
+        "Status": {
+            "select": {
+                "options": [
+                    {"name": "Not Started", "color": "red"},
+                    {"name": "In Progress", "color": "yellow"},
+                    {"name": "Complete", "color": "green"}
+                ]
+            }
+        }
+    }
+)
+
+# Add a page to the database
+page = notion.pages.create(
+    parent={"database_id": database.id},
+    properties={
+        "Name": {"title": [{"text": {"content": "New Task"}}]},
+        "Status": {"select": {"name": "Not Started"}}
+    }
 )
 ```
-
-### AI Processing
-```python
-from orion.bellatrix import AIToolkit
-
-# Initialize the AI toolkit
-ai = AIToolkit()
-
-# Analyze content sentiment
-sentiment = ai.analyze_sentiment("Great news! Our latest feature is now live!")
-```
-
-## 💫 Core Modules
-
-Each module in Orion is named after a star in the Orion constellation, embodying its unique characteristics:
-
-- **Betelgeuse** 🔴 - The bright red supergiant powers our social media management
-- **Bellatrix** 🤖 - The amazon star drives our AI capabilities
-- **Rigel** 🎥 - The bright blue star illuminates our video production pipeline
-- **Saiph** ⚙️ - The organized star manages our automation systems
 
 ## 📖 Documentation
 
 - [Official Documentation](https://orion.readthedocs.io/)
 - [Tutorials](https://orion.readthedocs.io/tutorials)
 - [API Reference](https://orion.readthedocs.io/api)
-- [Masterclass Series](https://orion.readthedocs.io/masterclass)
+- [Example Projects](https://orion.readthedocs.io/examples)
 
 ## 🤝 Contributing
 
@@ -134,18 +124,18 @@ Our project uses an agile methodology with:
 
 ### Upcoming Features
 
-- 📱 Mobile SDK for remote management
-- 🧠 Advanced AI model training capabilities
-- 🎞️ Real-time video processing
-- 🔄 Enhanced CI/CD pipeline integration
+- 📱 Mobile SDK for remote workspace management
+- 🔄 Bi-directional sync capabilities
+- 🔌 Plugin system for custom integrations
+- 🚀 Enhanced performance optimizations
 
 ### Future Vision
 
 Orion is continuously evolving, with planned expansions into:
-- Cloud-native architecture
-- Edge computing support
+- Advanced automation capabilities
+- Real-time collaboration features
 - Extended API capabilities
-- Advanced automation features
+- Enterprise-grade security features
 
 ## 📝 License
 

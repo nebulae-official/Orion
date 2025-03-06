@@ -1,5 +1,10 @@
 .PHONY: help install test docs run build clean profile profile-viz
 
+# Run each recipe in a single shell and use bash.
+.ONESHELL:
+SHELL := /bin/bash
+
+# version and project variables remain unchanged.
 version := 0.1.0
 project := nebula-orion
 
@@ -20,33 +25,52 @@ help:
 	@echo --------------------------------------------------
 
 install:
+	# Setup robust error handling for this target.
+	@set -e
+	@set -o pipefail
+	@trap 'echo "Error: Installation process failed"; exit 1' ERR
 	@echo "Starting installation of dependencies..."
-	uv venv
-	uv sync
+	@uv venv
+	@uv sync
 	@echo "Dependencies installed successfully."
 
 test:
+	@set -e
+	@set -o pipefail
+	@trap 'echo "Error: Test suite execution failed"; exit 1' ERR
 	@echo "Running test suite with pytest..."
-	uv run python -m pytest tests --cov=src --verbose
+	@uv run python -m pytest tests --cov=src --verbose
 	@echo "Test suite execution completed."
 
 docs:
+	@set -e
+	@set -o pipefail
+	@trap 'echo "Error: Documentation build process failed"; exit 1' ERR
 	@echo "Building documentation with Sphinx..."
 	# Uncomment below to enable documentation build:
 	# sphinx-build -b html docs/source docs/build
 	@echo "Documentation build process completed (if enabled)."
 
 run:
+	@set -e
+	@set -o pipefail
+	@trap 'echo "Error: Application execution failed"; exit 1' ERR
 	@echo "Launching the application..."
-	uv run python -m nebula_orion.main
+	@uv run python -m nebula_orion.main
 	@echo "Application execution finished."
 
 build:
+	@set -e
+	@set -o pipefail
+	@trap 'echo "Error: Application build failed"; exit 1' ERR
 	@echo "Building the application using hatch..."
-	uv build
+	@uv build
 	@echo "Application build completed."
 
 clean:
+	@set -e
+	@set -o pipefail
+	@trap 'echo "Error: Cleanup process failed"; exit 1' ERR
 	@echo "Starting cleanup process..."
 	@echo "Removing Python caches..."
 	@find . -type d \( -name "__pycache__" -o -name ".pytest_cache" -o -name ".mypy_cache" -o -name ".ruff_cache" \) 2>/dev/null -exec rm -rf {} +
@@ -64,13 +88,19 @@ clean:
 	@echo "Cleanup completed."
 
 profile:
+	@set -e
+	@set -o pipefail
+	@trap 'echo "Error: Profiling process failed"; exit 1' ERR
 	@echo "Running application with profiling (library code only)..."
-	uv run python -c "import cProfile, pstats, nebula_orion.main; \
+	@uv run python -c "import cProfile, pstats, nebula_orion.main; \
 					  cProfile.run('nebula_orion.main.main()', 'profile.stats'); \
 					  p = pstats.Stats('profile.stats'); \
 					  p.strip_dirs().sort_stats('cumulative').print_stats('nebula_orion')"
 	@echo "Profile data saved to profile.stats (filtered output printed above)"
 
 profile-viz:
+	@set -e
+	@set -o pipefail
+	@trap 'echo "Error: Profile visualization failed"; exit 1' ERR
 	@echo "Launching snakeviz profile visualization for library code..."
-	uv run snakeviz profile.stats
+	@uv run snakeviz profile.stats

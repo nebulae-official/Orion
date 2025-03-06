@@ -1,7 +1,7 @@
 [project]
 name = "nebula-orion"
 version = "0.1.0"
-description = "Orion Library"
+description = "Orion Python Library"
 readme = "README.md"
 license = { file = "LICENSE" }
 authors = [{ name = "Gishant", email = "khiladisngh@hotmail.com" }]
@@ -12,18 +12,43 @@ classifiers = [
     "Programming Language :: Python :: 3.12",
     "License :: OSI Approved :: MIT License",
     "Operating System :: OS Independent",
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "Topic :: Office/Business :: Office Suites",
+    "Topic :: Software Development :: Libraries :: Python Modules",
 ]
+keywords = ["notion", "api", "workspace", "management", "automation"]
 requires-python = ">=3.9"
 dependencies = []
+
+
+[project.urls]
+Homepage = "https://github.com/yourusername/orion"
+Documentation = "https://orion.readthedocs.io"
+Repository = "https://github.com/yourusername/orion.git"
+Issues = "https://github.com/yourusername/orion/issues"
 
 [build-system]
 requires = ["hatchling"]
 build-backend = "hatchling.build"
+
+[tool.ruff]
+target-version = "py39"
+line-length = 88
+select = ["ALL"]
+
+[tool.pytest.ini_options]
+addopts = "--cov=src --cov-report=term-missing"
+testpaths = ["tests"]
 
 [dependency-groups]
 dev = [
     "pytest>=8.3.5",
     "pytest-cov>=6.0.0",
     "pytest-sugar>=1.0.0",
-    "snakeviz>=2.2.0",
+]
+docs = [
+    "mkdocs-material>=9.6.7",
+    "mkdocstrings>=0.28.2",
+    "mkdocstrings-python>=1.16.2",
 ]

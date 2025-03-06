@@ -1,7 +1,7 @@
 site_name: Nebula Orion
 site_url: https://mydomain.org/mysite
 site_author: Gishant Singh
-site_description: The Cosmic Toolkit for Social Media, AI, and Video Production
+site_description: A Powerful Python Toolkit for Notion Management
 
 # Repository
 repo_name: nebula-orion
@@ -114,21 +114,18 @@ nav:
     - Installation: getting-started/installation.md
     - Quick Start: getting-started/quick-start.md
     - Configuration: getting-started/configuration.md
-  - Core Modules:
+  - Core Module:
     - Overview: modules/overview.md
-    - Betelgeuse - Social Media: modules/betelgeuse.md
-    - Bellatrix - AI Toolkit: modules/bellatrix.md
-    - Rigel - Video Production: modules/rigel.md
-    - Saiph - Automation: modules/saiph.md
+    - Betelgeuse - Notion Management: modules/betelgeuse.md
   - Tutorials:
     - Basic Usage: tutorials/basic-usage.md
-    - Advanced Techniques: tutorials/advanced-techniques.md
+    - Setting up Notion Integration: tutorials/notion-setup.md
+    - Working with Databases: tutorials/databases.md
+    - Managing Pages: tutorials/pages.md
+    - Advanced Usage: tutorials/advanced-techniques.md
   - API Reference:
     - nebula_orion: api/nebula_orion.md
     - betelgeuse: api/betelgeuse.md
-    - bellatrix: api/bellatrix.md
-    - rigel: api/rigel.md
-    - saiph: api/saiph.md
   - Contributing: contributing.md
   - Roadmap: roadmap.md
   - Changelog: changelog.md

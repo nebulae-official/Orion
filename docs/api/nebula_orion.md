@@ -21,7 +21,7 @@
 
 ## Constants
 
-### \_\_version\_\_
+### __version__
 
 ```python
 __version__ = "0.1.0"
@@ -29,7 +29,7 @@ __version__ = "0.1.0"
 
 The current version of the nebula_orion package.
 
-### \_\_author\_\_
+### __author__
 
 ```python
 __author__ = "Gishant Singh"
@@ -37,7 +37,7 @@ __author__ = "Gishant Singh"
 
 The author of the nebula_orion package.
 
-### \_\_email\_\_
+### __email__
 
 ```python
 __email__ = "khiladisngh@hotmail.com"
@@ -45,7 +45,7 @@ __email__ = "khiladisngh@hotmail.com"
 
 Contact email for the nebula_orion package.
 
-### \_\_license\_\_
+### __license__
 
 ```python
 __license__ = "MIT"
@@ -67,21 +67,22 @@ print(f"Nebula Orion version: {nebula_orion.__version__}")
 
 ## Module Structure
 
-Nebula Orion follows a modular structure with the following key components:
+Nebula Orion follows a focused structure with its core Notion management module:
 
 ```
 nebula_orion/
 ├── __init__.py       # Core package initialization
-├── main.py           # Main entry point
-├── betelgeuse/       # Social Media Management module
-├── bellatrix/        # AI Toolkit module
-├── rigel/            # Video Production module
-└── saiph/            # Automation System module
+├── main.py          # Main entry point
+├── betelgeuse/      # Notion Management module
+    ├── api/         # Notion API client implementations
+    ├── blocks/      # Block type definitions
+    ├── demo/        # Demo application
+    ├── oauth/       # OAuth implementation
+    ├── properties/  # Property type definitions
+    ├── sync/        # Sync utilities
+    └── templates/   # Template definitions
 ```
 
 ## See Also
 
-- [betelgeuse API](betelgeuse.md) - Social Media Management API
-- [bellatrix API](bellatrix.md) - AI Toolkit API
-- [rigel API](rigel.md) - Video Production API
-- [saiph API](saiph.md) - Automation System API
+- [betelgeuse API](betelgeuse.md) - Notion Management API

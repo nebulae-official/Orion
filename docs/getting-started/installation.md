@@ -9,6 +9,7 @@ Before installing Nebula Orion, make sure you have the following:
 - Python 3.9 or higher
 - pip (Python package installer)
 - Virtual environment tool (recommended: venv, virtualenv, or conda)
+- A Notion account and API access
 
 ## Installation Methods
 
@@ -57,40 +58,39 @@ print(nebula_orion.hello())
 
 If the above code runs without errors and displays the version number and welcome message, you've successfully installed Nebula Orion.
 
-## Optional Dependencies
+## Setting Up Notion Access
 
-Depending on which modules you plan to use, you may need to install additional dependencies:
+### 1. Create a Notion Integration
 
-### Betelgeuse (Social Media Module)
+1. Go to [https://www.notion.so/my-integrations](https://www.notion.so/my-integrations)
+2. Click "Create new integration"
+3. Fill in the required information:
+   - Name your integration
+   - Choose the workspace where you'll use it
+   - Set appropriate capabilities (read/write access)
+4. Save your integration's secret token
 
-```bash
-pip install nebula-orion[betelgeuse]
-```
+### 2. Grant Access to Pages
 
-### Bellatrix (AI Toolkit)
+1. Open your Notion workspace
+2. Navigate to the pages/databases you want to manage
+3. Click "Share" and invite your integration
+4. Grant appropriate permissions
 
-```bash
-pip install nebula-orion[bellatrix]
-```
+### 3. Configure Orion
 
-### Rigel (Video Production)
+Add your Notion API token to your configuration:
 
-```bash
-pip install nebula-orion[rigel]
-```
+```python
+from nebula_orion.betelgeuse import NotionClient
 
-### Saiph (Automation System)
+# Using direct initialization
+client = NotionClient(auth_token="your-notion-api-token")
 
-```bash
-pip install nebula-orion[saiph]
-```
-
-### All Modules
-
-To install all optional dependencies:
-
-```bash
-pip install nebula-orion[all]
+# Or using configuration file
+# orion_config.yaml:
+# notion:
+#   auth_token: "your-notion-api-token"
 ```
 
 ## Troubleshooting
@@ -115,4 +115,4 @@ If you encounter any issues during installation, try the following:
 
 ## Next Steps
 
-Now that you have Nebula Orion installed, check out the [Quick Start Guide](quick-start.md) to begin using it in your projects.
+Now that you have Nebula Orion installed, check out the [Quick Start Guide](quick-start.md) to begin managing your Notion workspace.

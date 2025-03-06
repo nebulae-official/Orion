@@ -1,13 +1,21 @@
 """Nebula Orion Project.
 
-This module serves as the core of the Nebula Orion project—a Python library designed
-to facilitate and streamline operations within the Orion framework. It encapsulates
-essential functions that support project initialization and user interaction.
+A Python library designed to provide robust Notion workspace management capabilities
+through its Betelgeuse module. It offers comprehensive tools for database management,
+page operations, and workspace automation.
 
 For additional details, configuration options, and usage examples, please refer to the
 official project documentation.
 #TODO: Add documentation link
 """
+
+from nebula_orion.log_config import configure_logging, get_logger
+
+# Initialize logging with default configuration
+configure_logging()
+
+# Create a logger for the package
+logger = get_logger("Orion")
 
 __version__ = "0.1.0"
 __author__ = "Gishant Singh"

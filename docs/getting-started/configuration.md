@@ -1,6 +1,6 @@
 # Configuration
 
-Nebula Orion provides flexible configuration options to customize the library's behavior for your specific needs.
+Nebula Orion provides flexible configuration options to customize the library's behavior for your Notion workspace integration.
 
 ## Configuration Methods
 
@@ -21,19 +21,16 @@ Here's an example of a basic configuration file:
 
 ```yaml
 # orion_config.yaml
-api_keys:
-  twitter: "your_twitter_api_key"
-  openai: "your_openai_api_key"
-  youtube: "your_youtube_api_key"
+notion:
+  auth_token: "your_notion_api_token"  # For direct API token auth
+  oauth:
+    client_id: "your_client_id"        # For OAuth integration
+    client_secret: "your_client_secret"
+    redirect_uri: "your_redirect_uri"
 
 storage:
   type: "local"  # Options: local, s3, azure
   path: "./data"  # For local storage
-
-processing:
-  default_resolution: "1080p"
-  threads: 4
-  temp_directory: "./tmp"
 
 logging:
   level: "info"  # Options: debug, info, warning, error, critical
@@ -56,29 +53,28 @@ config.load("/path/to/custom_config.yaml")
 
 ## Module-Specific Configuration
 
-Each module can have its own configuration section:
+The Betelgeuse module can have its own configuration section:
 
 ```yaml
-# Module-specific configurations
-betelgeuse:  # Social Media Management
-  default_platforms: ["twitter", "instagram", "linkedin"]
-  post_approval_required: true
-  analytics_retention_days: 90
+betelgeuse:
+  # Notion API settings
+  api_version: "2022-06-28"
+  rate_limit_per_second: 3
+  max_retries: 3
+  retry_delay: 1.0
 
-bellatrix:  # AI Toolkit
-  default_model: "gpt-4"
-  cache_responses: true
-  max_tokens: 1000
+  # Cache settings
+  cache_enabled: true
+  cache_ttl: 300  # seconds
+  cache_backend: "memory"  # Options: memory, redis
 
-rigel:  # Video Production
-  default_format: "mp4"
-  default_codec: "h264"
-  render_quality: "high"
+  # Sync settings
+  sync_interval: 60  # seconds
+  sync_chunk_size: 100
 
-saiph:  # Automation
-  notification_email: "admin@example.com"
-  check_interval_minutes: 15
-  max_concurrent_tasks: 5
+  # Template settings
+  template_path: "./templates"
+  default_locale: "en_US"
 ```
 
 ## Environment Variables
@@ -87,14 +83,13 @@ For sensitive information or deployment-specific settings, you can use environme
 
 ```bash
 # Core settings
-export ORION_API_KEY_TWITTER="your_twitter_api_key"
-export ORION_API_KEY_OPENAI="your_openai_api_key"
-export ORION_STORAGE_TYPE="s3"
-export ORION_S3_BUCKET="my-bucket"
+export ORION_NOTION_TOKEN="your_notion_api_token"
+export ORION_NOTION_CLIENT_ID="your_client_id"
+export ORION_NOTION_CLIENT_SECRET="your_client_secret"
 
 # Module-specific settings
-export ORION_BETELGEUSE_DEFAULT_PLATFORMS="twitter,linkedin"
-export ORION_BELLATRIX_DEFAULT_MODEL="gpt-4"
+export ORION_BETELGEUSE_API_VERSION="2022-06-28"
+export ORION_BETELGEUSE_CACHE_ENABLED="true"
 ```
 
 Environment variables take precedence over YAML configuration values.
@@ -107,24 +102,26 @@ You can also configure Nebula Orion programmatically:
 from nebula_orion import config
 
 # Set individual configuration values
-config.set("api_keys.twitter", "your_api_key")
-config.set("processing.threads", 8)
+config.set("notion.auth_token", "your_api_token")
+config.set("betelgeuse.rate_limit_per_second", 5)
 
 # Set multiple values at once
 config.update({
-    "storage": {
-        "type": "s3",
-        "bucket": "my-orion-data",
-        "region": "us-west-2"
+    "notion": {
+        "oauth": {
+            "client_id": "your_client_id",
+            "client_secret": "your_client_secret"
+        }
     },
     "betelgeuse": {
-        "default_platforms": ["twitter", "instagram"]
+        "cache_enabled": True,
+        "cache_ttl": 600
     }
 })
 
 # Get configuration values
-twitter_api_key = config.get("api_keys.twitter")
-storage_type = config.get("storage.type")
+auth_token = config.get("notion.auth_token")
+cache_enabled = config.get("betelgeuse.cache_enabled")
 ```
 
 ## Per-Instance Configuration
@@ -132,20 +129,15 @@ storage_type = config.get("storage.type")
 For fine-grained control, you can pass configuration options directly when initializing module instances:
 
 ```python
-from nebula_orion import betelgeuse, bellatrix
+from nebula_orion.betelgeuse import NotionClient
 
-# Configure the social media manager instance
-sm_manager = betelgeuse.SocialMediaManager(
-    default_platforms=["twitter", "linkedin"],
-    analytics_retention_days=60,
-    post_approval_required=False
-)
-
-# Configure the AI toolkit instance
-ai_toolkit = bellatrix.AIToolkit(
-    default_model="gpt-4",
-    cache_responses=True,
-    max_tokens=1500
+# Configure the Notion client instance
+client = NotionClient(
+    auth_token="your_token",
+    api_version="2022-06-28",
+    rate_limit_per_second=5,
+    cache_enabled=True,
+    cache_ttl=300
 )
 ```
 
@@ -161,7 +153,7 @@ Nebula Orion follows this order of precedence for configuration values (higher i
 
 ## Sensitive Information
 
-For sensitive information like API keys and passwords, we recommend using:
+For sensitive information like API tokens and OAuth credentials, we recommend using:
 
 1. Environment variables (preferred for production)
 2. A separate configuration file that is excluded from version control
@@ -206,12 +198,12 @@ For dynamic configuration that changes at runtime:
 def update_user_preferences(user_id, preferences):
     user_config = load_user_preferences(user_id)
 
-    # Update module configurations based on user preferences
-    if "video_quality" in preferences:
-        config.set("rigel.render_quality", preferences["video_quality"])
+    # Update Notion client configurations
+    if "rate_limit" in preferences:
+        config.set("betelgeuse.rate_limit_per_second", preferences["rate_limit"])
 
-    if "ai_model" in preferences:
-        config.set("bellatrix.default_model", preferences["ai_model"])
+    if "cache_ttl" in preferences:
+        config.set("betelgeuse.cache_ttl", preferences["cache_ttl"])
 ```
 
 ## Configuration Reference
@@ -222,5 +214,5 @@ For a complete list of configuration options, see the [Configuration API Referen
 
 Now that you understand how to configure Nebula Orion, check out:
 
-- [Module Overview](../modules/overview.md) - Learn about the different modules
+- [Betelgeuse Module Overview](../modules/betelgeuse.md) - Learn about the Notion management features
 - [Tutorials](../tutorials/basic-usage.md) - Step-by-step guides for common use cases

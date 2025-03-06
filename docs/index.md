@@ -1,15 +1,15 @@
 # ✨ Nebula Orion
 
 <div class="hero">
-  <h1>The Cosmic Toolkit for Social Media, AI, and Video Production</h1>
-  <p>Harness the power of the stars with this comprehensive Python library</p>
+  <h1>A Powerful Toolkit for Notion Management</h1>
+  <p>Harness the power of Notion with this comprehensive Python library</p>
   <a href="getting-started/installation/" class="md-button md-button--primary">Get Started</a>
   <a href="https://github.com/yourusername/orion" class="md-button">GitHub</a>
 </div>
 
 ## 🚀 Overview
 
-Nebula Orion is a powerful Python library designed to streamline and enhance your workflow across social media management, AI operations, and video production automation. With its modular architecture named after stars in the Orion constellation, this toolkit empowers you to build robust, scalable solutions for your digital content needs.
+Nebula Orion is a powerful Python library designed to streamline and enhance your Notion workspace management. Through its Betelgeuse module, it provides a robust set of tools for database management, content organization, and workspace automation.
 
 <div class="feature-grid">
   <div class="feature-card">
@@ -18,38 +18,20 @@ Nebula Orion is a powerful Python library designed to streamline and enhance you
   </div>
   <div class="feature-card">
     <h2>⚡ High Performance</h2>
-    <p>Optimized for speed and efficiency, allowing you to process large volumes of content without compromising on quality.</p>
+    <p>Optimized for speed and efficiency, allowing you to manage large Notion workspaces without compromising on performance.</p>
   </div>
   <div class="feature-card">
-    <h2>🧩 Modular Architecture</h2>
-    <p>Use only what you need with our modular design, allowing for flexible integration into existing systems.</p>
+    <h2>🧩 Rich API</h2>
+    <p>Comprehensive API for all Notion operations, from simple page creation to complex database queries and automation.</p>
   </div>
 </div>
 
-## 🌌 Core Modules
+## 🌌 Core Module
 
 <div class="module-card">
-  <h2><span class="emoji-icon">🔴</span> Betelgeuse - Social Media Management</h2>
-  <p>Betelgeuse powers your social media operations with advanced scheduling, analytics, and engagement tracking across multiple platforms. Like the bright red supergiant star it's named after, it stands out in your content management strategy.</p>
+  <h2><span class="emoji-icon">🔴</span> Betelgeuse - Notion Management</h2>
+  <p>Like the bright red supergiant star it's named after, Betelgeuse stands as the powerful core of your Notion operations. It provides comprehensive tools for database management, page operations, and workspace automation.</p>
   <a href="modules/betelgeuse/" class="md-button">Learn More</a>
-</div>
-
-<div class="module-card">
-  <h2><span class="emoji-icon">🤖</span> Bellatrix - AI Toolkit</h2>
-  <p>Named after the amazon star, Bellatrix equips you with machine learning model integration, natural language processing, and content optimization algorithms to enhance your digital content strategy.</p>
-  <a href="modules/bellatrix/" class="md-button">Learn More</a>
-</div>
-
-<div class="module-card">
-  <h2><span class="emoji-icon">🎥</span> Rigel - Video Production</h2>
-  <p>Rigel illuminates your video workflow with automated processing, render farm management, and asset organization, bringing the brightness of its namesake blue star to your production pipeline.</p>
-  <a href="modules/rigel/" class="md-button">Learn More</a>
-</div>
-
-<div class="module-card">
-  <h2><span class="emoji-icon">⚙️</span> Saiph - Automation System</h2>
-  <p>Saiph manages your project tracking, resource allocation, and workflow automation needs, bringing the organized nature of this star in the Orion constellation to your operational processes.</p>
-  <a href="modules/saiph/" class="md-button">Learn More</a>
 </div>
 
 ## 📚 Quick Links

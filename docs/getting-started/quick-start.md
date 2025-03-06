@@ -1,207 +1,228 @@
 # Quick Start Guide
 
-This guide will help you get up and running with Nebula Orion quickly. We'll explore the basics of each module to give you a solid foundation.
+This guide will help you get up and running with Nebula Orion quickly. We'll explore the basics of Notion workspace management to give you a solid foundation.
 
 ## Basic Usage
 
-After [installing Nebula Orion](installation.md), you can import and use it in your Python projects:
+After [installing Nebula Orion](installation.md) and setting up your Notion integration, you can start managing your workspace:
 
 ```python
-import nebula_orion
+from nebula_orion.betelgeuse import NotionClient
 
-# Print the welcome message
-print(nebula_orion.hello())
+# Initialize the client
+notion = NotionClient(auth_token="your-notion-api-token")
+
+# Print version
+print(notion.version)
 ```
 
-## Module Overview
+## Essential Operations
 
-Nebula Orion is organized into four main modules, each named after a star in the Orion constellation. Let's explore the basics of each module:
-
-### 🔴 Betelgeuse - Social Media Management
+### Working with Pages
 
 ```python
-from nebula_orion import betelgeuse
-
-# Initialize the social media manager
-sm_manager = betelgeuse.SocialMediaManager()
-
-# Schedule a post across platforms
-sm_manager.schedule_post(
-    content="Check out our latest update! 🚀",
-    platforms=["twitter", "linkedin"],
-    schedule_time="2024-03-15 14:00:00"
+# Create a simple page
+page = notion.pages.create(
+    parent={"page_id": "your-parent-page-id"},
+    properties={
+        "title": [{"text": {"content": "My New Page"}}]
+    },
+    children=[
+        {
+            "object": "block",
+            "type": "heading_1",
+            "heading_1": {
+                "rich_text": [{"text": {"content": "Welcome!"}}]
+            }
+        },
+        {
+            "object": "block",
+            "type": "paragraph",
+            "paragraph": {
+                "rich_text": [{"text": {"content": "This is my first page created with Nebula Orion."}}]
+            }
+        }
+    ]
 )
 
-# Analyze engagement metrics
-metrics = sm_manager.get_engagement_metrics(
-    platform="twitter",
-    start_date="2024-03-01",
-    end_date="2024-03-15"
+# Update a page
+notion.pages.update(
+    page_id=page.id,
+    properties={
+        "title": [{"text": {"content": "Updated Title"}}]
+    }
 )
-print(f"Total engagement: {metrics.total_engagement}")
+
+# Get page content
+page_content = notion.blocks.children.list(page.id)
 ```
 
-### 🤖 Bellatrix - AI Toolkit
+### Managing Databases
 
 ```python
-from nebula_orion import bellatrix
-
-# Initialize the AI toolkit
-ai = bellatrix.AIToolkit()
-
-# Analyze content sentiment
-sentiment = ai.analyze_sentiment("Great news! Our latest feature is now live!")
-print(f"Sentiment score: {sentiment.score}, Classification: {sentiment.classification}")
-
-# Generate content suggestions
-suggestions = ai.generate_content_suggestions(
-    topic="machine learning",
-    tone="informative",
-    length="medium"
+# Create a database
+database = notion.databases.create(
+    parent={"page_id": "your-parent-page-id"},
+    title=[{"text": {"content": "Project Tasks"}}],
+    properties={
+        "Name": {"title": {}},
+        "Status": {
+            "select": {
+                "options": [
+                    {"name": "Not Started", "color": "red"},
+                    {"name": "In Progress", "color": "yellow"},
+                    {"name": "Complete", "color": "green"}
+                ]
+            }
+        },
+        "Priority": {
+            "select": {
+                "options": [
+                    {"name": "High", "color": "red"},
+                    {"name": "Medium", "color": "yellow"},
+                    {"name": "Low", "color": "blue"}
+                ]
+            }
+        },
+        "Due Date": {"date": {}}
+    }
 )
-for suggestion in suggestions:
-    print(f"- {suggestion}")
+
+# Add entries to database
+notion.pages.create(
+    parent={"database_id": database.id},
+    properties={
+        "Name": {"title": [{"text": {"content": "Important Task"}}]},
+        "Status": {"select": {"name": "Not Started"}},
+        "Priority": {"select": {"name": "High"}},
+        "Due Date": {"date": {"start": "2024-04-01"}}
+    }
+)
+
+# Query database
+results = notion.databases.query(
+    database_id=database.id,
+    filter={
+        "and": [
+            {
+                "property": "Status",
+                "select": {"equals": "Not Started"}
+            },
+            {
+                "property": "Priority",
+                "select": {"equals": "High"}
+            }
+        ]
+    },
+    sorts=[
+        {
+            "property": "Due Date",
+            "direction": "ascending"
+        }
+    ]
+)
 ```
 
-### 🎥 Rigel - Video Production
+### Using Blocks
 
 ```python
-from nebula_orion import rigel
-
-# Initialize the video pipeline
-video_pipeline = rigel.VideoProductionPipeline()
-
-# Set up a processing job
-job = video_pipeline.create_job(
-    input_file="raw_footage.mp4",
-    output_format="mp4",
-    resolution="1080p"
+# Add blocks to a page
+notion.blocks.children.append(
+    page.id,
+    children=[
+        {
+            "object": "block",
+            "type": "to_do",
+            "to_do": {
+                "rich_text": [{"text": {"content": "Task to complete"}}],
+                "checked": False
+            }
+        },
+        {
+            "object": "block",
+            "type": "callout",
+            "callout": {
+                "rich_text": [{"text": {"content": "Important note!"}}],
+                "icon": {"emoji": "⚠️"}
+            }
+        }
+    ]
 )
 
-# Add processing steps
-job.add_step(rigel.ColorGrading(preset="cinematic"))
-job.add_step(rigel.AddWatermark(image="logo.png", position="bottom-right"))
-job.add_step(rigel.ExportWithSubtitles(subtitle_file="captions.srt"))
-
-# Run the job
-result = job.process()
-print(f"Video processed successfully: {result.output_path}")
+# Update a block
+notion.blocks.update(
+    block_id="your-block-id",
+    to_do={
+        "rich_text": [{"text": {"content": "Updated task"}}],
+        "checked": True
+    }
+)
 ```
 
-### ⚙️ Saiph - Automation System
+### Using the Builder Pattern
 
 ```python
-from nebula_orion import saiph
-
-# Initialize the automation system
-auto_system = saiph.AutomationSystem()
-
-# Create a workflow
-workflow = auto_system.create_workflow("Content Publication")
-
-# Add tasks to the workflow
-workflow.add_task(
-    "Create content",
-    assigned_to="content_team",
-    duration="2d"
-)
-workflow.add_task(
-    "Review content",
-    assigned_to="editorial_team",
-    duration="1d",
-    depends_on=["Create content"]
-)
-workflow.add_task(
-    "Publish content",
-    assigned_to="publishing_team",
-    duration="4h",
-    depends_on=["Review content"]
+from nebula_orion.betelgeuse.page_builder import PageBuilder
+from nebula_orion.betelgeuse.blocks import (
+    Heading1, Paragraph, TodoBlock, Callout
 )
 
-# Start the workflow
-workflow.start()
+# Create a structured page
+builder = PageBuilder(parent={"database_id": database.id})
 
-# Check status
-status = workflow.get_status()
-print(f"Workflow progress: {status.progress}%")
+# Add properties
+builder.add_property("Name", "Weekly Review")
+builder.add_property("Status", "Not Started")
+builder.add_property("Priority", "High")
+
+# Add content blocks
+builder.add_block(Heading1("Weekly Objectives"))
+builder.add_block(Paragraph("Key items to review this week:"))
+builder.add_block(TodoBlock("Review project status", checked=False))
+builder.add_block(TodoBlock("Update documentation", checked=False))
+builder.add_block(Callout("Remember to update metrics!", icon="📊"))
+
+# Create the page
+page = notion.pages.create_from_builder(builder)
 ```
 
-## Combining Modules
-
-One of the powerful features of Nebula Orion is the ability to combine modules for integrated workflows:
+## Error Handling
 
 ```python
-from nebula_orion import betelgeuse, bellatrix, rigel, saiph
+from nebula_orion.betelgeuse.errors import NotionError
 
-# Create a content workflow
-def create_content_workflow():
-    # Use AI to generate content ideas
-    ai = bellatrix.AIToolkit()
-    content_ideas = ai.generate_content_suggestions(topic="technology trends")
-
-    # Create a video for the best idea
-    video_pipeline = rigel.VideoProductionPipeline()
-    job = video_pipeline.create_job(template="explainer_video")
-    job.set_script(content_ideas[0])
-    video_path = job.process().output_path
-
-    # Schedule social media posts with the video
-    sm_manager = betelgeuse.SocialMediaManager()
-    sm_manager.schedule_post(
-        content="Check out our latest tech trend analysis! #TechTrends",
-        media=[video_path],
-        platforms=["twitter", "linkedin", "instagram"]
-    )
-
-    # Set up an automation to track engagement
-    auto_system = saiph.AutomationSystem()
-    tracking = auto_system.create_tracking_task(
-        "Monitor video engagement",
-        metrics=["views", "likes", "shares"],
-        notification_threshold=1000
-    )
-
-    return tracking
-
-# Execute the workflow
-tracking_task = create_content_workflow()
-print(f"Content workflow initiated. Tracking ID: {tracking_task.id}")
+try:
+    page = notion.pages.retrieve("invalid-page-id")
+except NotionError as e:
+    print(f"Error: {e.message}")
+    print(f"Status: {e.status}")
+    print(f"Code: {e.code}")
 ```
 
 ## Configuration
 
-For more advanced usage, you can configure Nebula Orion through a configuration file. Create a file named `orion_config.yaml` in your project:
-
-```yaml
-# orion_config.yaml
-api_keys:
-  twitter: "your_twitter_api_key"
-  openai: "your_openai_api_key"
-
-storage:
-  type: "s3"
-  bucket: "orion-assets"
-  region: "us-west-2"
-
-processing:
-  default_resolution: "1080p"
-  threads: 4
-```
-
-Then load it in your application:
-
 ```python
+# Configure with options
+notion = NotionClient(
+    auth_token="your-token",
+    api_version="2022-06-28",
+    rate_limit_per_second=3,
+    cache_enabled=True,
+    cache_ttl=300
+)
+
+# Or use configuration file
 from nebula_orion import config
 
-# Load configuration
-config.load_from_file("orion_config.yaml")
+config.load("orion_config.yaml")
+notion = NotionClient()  # Will use config file settings
 ```
 
 ## Next Steps
 
-Now that you understand the basics of Nebula Orion, explore these resources:
+Now that you understand the basics, explore these resources:
 
+- [Betelgeuse Module Documentation](../modules/betelgeuse.md) - Complete documentation of Notion management features
 - [Configuration Guide](configuration.md) - Learn about advanced configuration options
-- [Module Documentation](../modules/overview.md) - Detailed documentation for each module
-- [API Reference](../api/nebula_orion.md) - Complete API reference
-- [Tutorials](../tutorials/basic-usage.md) - Step-by-step tutorials for common use cases
+- [Working with Databases](../tutorials/databases.md) - In-depth guide to database management
+- [Managing Pages](../tutorials/pages.md) - Detailed page operations guide
