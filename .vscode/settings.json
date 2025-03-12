@@ -1,0 +1,74 @@
+{
+  "github.copilot.chat.codeGeneration.instructions": [
+    {
+      "text": "Let your code flow like a well-crafted sonnet: follow PEP8, use meaningful names, and adorn each function with clear, Google-style docstrings, Ruff complaints, and type hints."
+    },
+    {
+      "text": "Sprinkle type hints generously so every parameter and return value shines with clarity - use typing module extensively for complex types."
+    },
+    {
+      "text": "Keep functions focused and modules small; let each piece of your code sing its own verse in the library's epic."
+    },
+    {
+      "text": "Follow Nebula Orion's architecture - focus on clean integration with the Notion API through the Betelgeuse module."
+    }
+  ],
+  "github.copilot.chat.testGeneration.instructions": [
+    {
+      "text": "Generate tests with pytest as your loyal partner, covering both common cases and quirky edge scenarios."
+    },
+    {
+      "text": "Organize tests using fixtures to maintain elegance and modularity—like verses in a well-structured poem."
+    },
+    {
+      "text": "Celebrate functionality and graceful error handling in every test to ensure your library remains resilient."
+    },
+    {
+      "text": "Ensure test coverage for Notion API interactions, with appropriate mocks for external services."
+    }
+  ],
+  "github.copilot.chat.reviewSelection.instructions": [
+    {
+      "text": "Review code as if critiquing a masterpiece: check for PEP8 compliance, consistent naming, clear docstrings, and thoughtful error handling."
+    },
+    {
+      "text": "Ensure each function is both performant and graceful, like a well-choreographed dance."
+    },
+    {
+      "text": "Confirm that type annotations are not mere decoration but insightful hints to the code's true intent."
+    },
+    {
+      "text": "Verify compatibility with Notion's API patterns and data structures to maintain harmony in the integration."
+    }
+  ],
+  "github.copilot.chat.commitMessageGeneration.instructions": [
+    {
+      "text": "Craft commit messages as concise, commanding verses in the imperative mood, each prefixed with an appropriate emoji (e.g., '✨ Add', '🐛 Fix', '♻️ Refactor')."
+    },
+    {
+      "text": "Use these emoji categories: ✨ (new feature), 🐛 (bugfix), 📚 (documentation), ♻️ (refactor), 🧪 (tests), 🔧 (configuration), 🚀 (performance), 🎨 (style), 🔒 (security)."
+    },
+    {
+      "text": "Include the module name in parentheses, followed by the change description: '✨ feat(betelgeuse): Add page builder API'."
+    },
+    {
+      "text": "For complex changes, write a short summary line followed by a blank line and detailed explanation in the body."
+    }
+  ],
+  "github.copilot.chat.pullRequestDescriptionGeneration.instructions": [
+    {
+      "text": "Create pull request titles as crisp as a haiku—succinct yet expressive of the core change."
+    },
+    {
+      "text": "Weave a compelling narrative in your pull request description that provides context, impact, and relevant details."
+    },
+    {
+      "text": "Highlight key changes made in the code, linking back to the issue for deeper understanding."
+    },
+    {
+      "text": "Include a checklist with testing steps, documentation updates, and any migration notes for Notion API changes."
+    }
+  ],
+  "editor.formatOnSave": true,
+  "python.analysis.typeCheckingMode": "strict"
+}

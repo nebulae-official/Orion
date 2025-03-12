@@ -23,10 +23,10 @@ dependencies = []
 
 
 [project.urls]
-Homepage = "https://github.com/yourusername/orion"
+Homepage = "https://github.com/nebulae-official/Orion"
 Documentation = "https://orion.readthedocs.io"
-Repository = "https://github.com/yourusername/orion.git"
-Issues = "https://github.com/yourusername/orion/issues"
+Repository = "https://github.com/nebulae-official/Orion.git"
+Issues = "https://github.com/nebulae-official/Orion/issues"
 
 [build-system]
 requires = ["hatchling"]
@@ -46,9 +46,12 @@ dev = [
     "pytest>=8.3.5",
     "pytest-cov>=6.0.0",
     "pytest-sugar>=1.0.0",
+    "snakeviz>=2.2.2",
 ]
 docs = [
+    "mkdocs-git-revision-date-localized-plugin>=1.4.4",
     "mkdocs-material>=9.6.7",
+    "mkdocs-minify-plugin>=0.8.0",
     "mkdocstrings>=0.28.2",
     "mkdocstrings-python>=1.16.2",
 ]

@@ -9,30 +9,58 @@ version := 0.1.0
 project := nebula-orion
 
 help:
-	@echo --------------------------------------------------
-	@echo Usage: make [target]
+	@echo "====================== Nebula Orion (v${version}) ======================"
+	@echo "Usage: make [target]"
 	@echo
-	@echo Available Targets:
-	@echo   help       : Display this help message and usage instructions.
-	@echo   install    : Install project and development dependencies from requirements files.
-	@echo   test       : Run all tests using pytest with coverage and verbose output.
-	@echo   docs       : Build documentation using MkDocs.
-	@echo   run        : Launch the application using uvicorn.
-	@echo   build      : Build the application using hatch.
-	@echo   clean      : Remove caches, build artifacts, virtual environments, logs, and IDE directories.
-	@echo   profile    : Run the application with cProfile and generate profile data.
-	@echo   profile-viz: Visualize profile data using snakeviz.
-	@echo --------------------------------------------------
+	@echo "Development Targets:"
+	@echo "  install-dev   : Install all development dependencies"
+	@echo "  install-docs  : Install documentation dependencies"
+	@echo "  install-prod  : Install production dependencies only"
+	@echo "  test          : Run tests with pytest and coverage"
+	@echo
+	@echo "Documentation Targets:"
+	@echo "  docs          : Build documentation using MkDocs"
+	@echo
+	@echo "Application Targets:"
+	@echo "  run           : Launch the application"
+	@echo "  build         : Build the application package"
+	@echo
+	@echo "Maintenance Targets:"
+	@echo "  clean         : Remove all build artifacts and caches"
+	@echo
+	@echo "Profiling Targets:"
+	@echo "  profile       : Run application with cProfile"
+	@echo "  profile-viz   : Visualize profile data with snakeviz"
+	@echo
+	@echo "For detailed information, visit: https://github.com/nebulae-official/Orion"
+	@echo "=================================================================="
 
-install:
-	# Setup robust error handling for this target.
+install-dev:
 	@set -e
 	@set -o pipefail
-	@trap 'echo "Error: Installation process failed"; exit 1' ERR
-	@echo "Starting installation of dependencies..."
+	@trap 'echo "Error: Development installation process failed"; exit 1' ERR
+	@echo "Starting installation of development dependencies..."
 	@uv venv
 	@uv sync
-	@echo "Dependencies installed successfully."
+	@echo "Development dependencies installed successfully."
+
+install-prod:
+	@set -e
+	@set -o pipefail
+	@trap 'echo "Error: Production installation process failed"; exit 1' ERR
+	@echo "Starting installation of production dependencies..."
+	@uv venv
+	@uv sync --no-dev
+	@echo "Production dependencies installed successfully."
+
+install-docs:
+	@set -e
+	@set -o pipefail
+	@trap 'echo "Error: Documentation dependencies installation process failed"; exit 1' ERR
+	@echo "Starting installation of documentation dependencies..."
+	@uv venv
+	@uv sync --group docs
+	@echo "Documentation dependencies installed successfully."
 
 test:
 	@set -e
@@ -46,10 +74,9 @@ docs:
 	@set -e
 	@set -o pipefail
 	@trap 'echo "Error: Documentation build process failed"; exit 1' ERR
-	@echo "Building documentation with Sphinx..."
-	# Uncomment below to enable documentation build:
-	# sphinx-build -b html docs/source docs/build
-	@echo "Documentation build process completed (if enabled)."
+	@echo "Starting local MkDocs server..."
+	@uv run python -m mkdocs serve
+	@echo "Documentation server is running. Visit http://127.0.0.1:8000 to view."
 
 run:
 	@set -e
