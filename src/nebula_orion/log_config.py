@@ -11,6 +11,7 @@ import logging
 import logging.config
 import sys
 from pathlib import Path
+from typing import Any
 
 # Default log format
 DEFAULT_LOG_FORMAT = "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
@@ -65,7 +66,7 @@ def configure_logging(
     date_format = date_format or DEFAULT_DATE_FORMAT
 
     # Create a dict config
-    config_dict = {
+    config_dict: dict[str, Any] = {
         "version": 1,
         "disable_existing_loggers": False,
         "formatters": {
