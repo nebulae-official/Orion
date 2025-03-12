@@ -110,8 +110,6 @@ clean:
 	@find . -type d \( -name ".venv" -o -name ".env" -o -name "venv" -o -name "env" \) 2>/dev/null -exec rm -rf {} +
 	@echo "Removing logs and temporary files..."
 	@find . -type f \( -name "*.log" -o -name "*.pdb" -o -name "*.tmp" -o -name "*.tmp.*" -o -name "*.swp" -o -name "*.swo" -o -name ".DS_Store" \) 2>/dev/null -delete
-	@echo "Removing IDE-specific directories..."
-	@find . -type d \( -name ".idea" -o -name ".vscode" \) 2>/dev/null -exec rm -rf {} +
 	@echo "Cleanup completed."
 
 profile:
