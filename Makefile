@@ -35,7 +35,7 @@ help:
 	@echo "For detailed information, visit: https://github.com/nebulae-official/Orion"
 	@echo "=================================================================="
 
-install-dev:
+install-dev: install-docs
 	@set -e
 	@set -o pipefail
 	@trap 'echo "Error: Development installation process failed"; exit 1' ERR
@@ -44,7 +44,7 @@ install-dev:
 	@uv sync
 	@echo "Development dependencies installed successfully."
 
-install-prod:
+install-prod: install-docs
 	@set -e
 	@set -o pipefail
 	@trap 'echo "Error: Production installation process failed"; exit 1' ERR
