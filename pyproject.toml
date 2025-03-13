@@ -14,12 +14,14 @@ classifiers = [
     "Operating System :: OS Independent",
     "Development Status :: 4 - Beta",
     "Intended Audience :: Developers",
-    "Topic :: Office/Business :: Office Suites",
     "Topic :: Software Development :: Libraries :: Python Modules",
 ]
 keywords = ["notion", "api", "workspace", "management", "automation"]
 requires-python = ">=3.9"
-dependencies = []
+dependencies = [
+    "pydantic>=2.10.6",
+    "requests>=2.32.3",
+]
 
 
 [project.urls]

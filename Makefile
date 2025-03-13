@@ -12,7 +12,8 @@ help:
 	@echo "====================== Nebula Orion (v${version}) ======================"
 	@echo "Usage: make [target]"
 	@echo
-	@echo "Development Targets:"
+	@echo "Available Targets:"
+	@echo "  init          : Initialize the project and install dependencies"
 	@echo "  install-dev   : Install all development dependencies"
 	@echo "  install-docs  : Install documentation dependencies"
 	@echo "  install-prod  : Install production dependencies only"
@@ -35,12 +36,24 @@ help:
 	@echo "For detailed information, visit: https://github.com/nebulae-official/Orion"
 	@echo "=================================================================="
 
+init:
+	@set -e
+	@set -o pipefail
+	@trap 'echo "Error: Initialization process failed"; exit 1' ERR
+	@echo "Initializing the project..."
+	@echo "Creating virtual environment..."
+	@uv venv
+	@echo "Virtual environment created successfully."
+	@echo "Installing dependencies..."
+	@uv sync
+	@echo "Dependencies installed successfully."
+	@echo "Project initialization completed."
+
 install-dev: install-docs
 	@set -e
 	@set -o pipefail
 	@trap 'echo "Error: Development installation process failed"; exit 1' ERR
 	@echo "Starting installation of development dependencies..."
-	@uv venv
 	@uv sync
 	@echo "Development dependencies installed successfully."
 
@@ -49,7 +62,6 @@ install-prod: install-docs
 	@set -o pipefail
 	@trap 'echo "Error: Production installation process failed"; exit 1' ERR
 	@echo "Starting installation of production dependencies..."
-	@uv venv
 	@uv sync --no-dev
 	@echo "Production dependencies installed successfully."
 
@@ -58,7 +70,6 @@ install-docs:
 	@set -o pipefail
 	@trap 'echo "Error: Documentation dependencies installation process failed"; exit 1' ERR
 	@echo "Starting installation of documentation dependencies..."
-	@uv venv
 	@uv sync --group docs
 	@echo "Documentation dependencies installed successfully."
 

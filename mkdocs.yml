@@ -125,7 +125,9 @@ nav:
     - Advanced Usage: tutorials/advanced-techniques.md
   - API Reference:
     - nebula_orion: api/nebula_orion.md
-    - betelgeuse: api/betelgeuse.md
+    - betelgeuse: api/betelgeuse/betelgeuse.md
   - Contributing: contributing.md
-  - Roadmap: roadmap.md
+  - Roadmap:
+    - Orion: roadmaps/orion-roadmap.md
+    - Betelgeuse: roadmaps/betelgeuse-roadmap.md
   - Changelog: changelog.md

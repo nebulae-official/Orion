@@ -1,10 +1,10 @@
 {
   "github.copilot.chat.codeGeneration.instructions": [
     {
-      "text": "Let your code flow like a well-crafted sonnet: follow PEP8, use meaningful names, and adorn each function with clear, Google-style docstrings, Ruff complaints, and type hints."
+      "text": "Let your code flow like a well-crafted sonnet: follow PEP8, use meaningful names, and adorn each function with clear, Google-style docstrings."
     },
     {
-      "text": "Sprinkle type hints generously so every parameter and return value shines with clarity - use typing module extensively for complex types."
+      "text": "Sprinkle type hints generously so every parameter and return value shines with clarity - use inbuilt types and make sure to follow ruff's type hinting rules."
     },
     {
       "text": "Keep functions focused and modules small; let each piece of your code sing its own verse in the library's epic."
