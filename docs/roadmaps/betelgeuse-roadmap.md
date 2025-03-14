@@ -160,16 +160,12 @@ A Python wrapper for the Notion API, enabling seamless interaction with Notion's
     </details>
 
 - [ ] Implement Databases API module
-
 - [ ] Create Blocks API module
-
 - [ ] Add Users API module
-
 - [ ] Develop Search API functionality
 
 ## 🏗️ Phase 3: Model Development
 - [ ] Create base model class
-
 - [ ] Develop Page model with property handling
     <details><summary>Page model implementation</summary>
 
@@ -197,7 +193,6 @@ A Python wrapper for the Notion API, enabling seamless interaction with Notion's
     </details>
 
 - [ ] Implement Database model
-
 - [ ] Create various Block models
     <details><summary>Block models approach</summary>
 
@@ -223,9 +218,7 @@ A Python wrapper for the Notion API, enabling seamless interaction with Notion's
     </details>
 
 - [ ] Develop User model
-
 - [ ] Implement Property models for different data types
-
 - [ ] Add rich text handling utilities
 
 ## 🛠️ Phase 4: Builder Patterns and Abstractions
@@ -277,7 +270,6 @@ A Python wrapper for the Notion API, enabling seamless interaction with Notion's
     </details>
 
 - [ ] Create DatabaseBuilder
-
 - [ ] Develop QueryBuilder
     <details><summary>QueryBuilder implementation</summary>
 
@@ -330,14 +322,11 @@ A Python wrapper for the Notion API, enabling seamless interaction with Notion's
     </details>
 
 - [ ] Add BlockBuilder
-
 - [ ] Implement PropertyBuilder
-
 - [ ] Create helper functions
 
 ## ✨ Phase 5: Advanced Features
 - [ ] Implement OAuth 2.0 authentication flow
-
 - [ ] Develop sync manager
     <details><summary>Sync manager concept</summary>
 
@@ -373,16 +362,12 @@ A Python wrapper for the Notion API, enabling seamless interaction with Notion's
     </details>
 
 - [ ] Add support for streaming updates
-
 - [ ] Create caching mechanisms
-
 - [ ] Implement retry strategies
-
 - [ ] Add webhook support
 
 ## 🧪 Phase 6: Testing
 - [ ] Set up testing framework
-
 - [ ] Create mock responses
     <details><summary>Mock API approach</summary>
 
@@ -411,11 +396,8 @@ A Python wrapper for the Notion API, enabling seamless interaction with Notion's
     </details>
 
 - [ ] Write unit tests
-
 - [ ] Implement integration tests
-
 - [ ] Add property-based testing
-
 - [ ] Create CI workflow
 
 ## 📚 Phase 7: Documentation
@@ -432,7 +414,6 @@ A Python wrapper for the Notion API, enabling seamless interaction with Notion's
     * Common patterns and best practices
     * Error handling
     </details>
-
 - [ ] Develop tutorials for common use cases
 - [ ] Add inline documentation and docstrings
 - [ ] Create code examples for README
