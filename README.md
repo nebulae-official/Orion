@@ -36,7 +36,7 @@ Nebula Orion is built as a modular ecosystem, with each module named after a sta
 
 ### Prerequisites
 
-- Python 3.9 or higher
+- Python 3.12 or higher
 - UV package manager (recommended)
 
 ### Standard Installation

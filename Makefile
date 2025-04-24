@@ -49,7 +49,7 @@ init:
 	@echo "Dependencies installed successfully."
 	@echo "Project initialization completed."
 
-install-dev: install-docs
+install-dev:
 	@set -e
 	@set -o pipefail
 	@trap 'echo "Error: Development installation process failed"; exit 1' ERR
@@ -57,21 +57,13 @@ install-dev: install-docs
 	@uv sync
 	@echo "Development dependencies installed successfully."
 
-install-prod: install-docs
+install-prod:
 	@set -e
 	@set -o pipefail
 	@trap 'echo "Error: Production installation process failed"; exit 1' ERR
 	@echo "Starting installation of production dependencies..."
 	@uv sync --no-dev
 	@echo "Production dependencies installed successfully."
-
-install-docs:
-	@set -e
-	@set -o pipefail
-	@trap 'echo "Error: Documentation dependencies installation process failed"; exit 1' ERR
-	@echo "Starting installation of documentation dependencies..."
-	@uv sync --group docs
-	@echo "Documentation dependencies installed successfully."
 
 test:
 	@set -e
@@ -85,8 +77,8 @@ docs:
 	@set -e
 	@set -o pipefail
 	@trap 'echo "Error: Documentation build process failed"; exit 1' ERR
-	@echo "Starting local MkDocs server..."
-	@uv run python -m mkdocs serve
+	@echo "Starting docs server..."
+	# @uv run python -m mkdocs serve
 	@echo "Documentation server is running. Visit http://127.0.0.1:8000 to view."
 
 run:

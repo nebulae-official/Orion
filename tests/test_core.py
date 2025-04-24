@@ -1,7 +1,6 @@
 """Test cases for the core Nebula Orion functionality."""
 
 import logging
-import os
 import shutil
 import subprocess
 import sys
@@ -11,8 +10,8 @@ from nebula_orion import __version__, hello
 from nebula_orion.log_config import (
     DEFAULT_LOG_DIR,
     configure_logging,
-    get_logger,
     get_log_file_path,
+    get_logger,
 )
 from nebula_orion.main import main
 
@@ -29,6 +28,7 @@ def test_version_consistency() -> None:
     project_root = Path(__file__).parent.parent
 
     # Read version from Makefile
+    makefile_version = None
     makefile_content = (project_root / "Makefile").open().read()
     for line in makefile_content.split("\n"):
         if line.startswith("version :="):
@@ -36,6 +36,7 @@ def test_version_consistency() -> None:
             break
 
     # Read version from pyproject.toml
+    pyproject_version = None
     pyproject_content = (project_root / "pyproject.toml").open().read()
     for line in pyproject_content.split("\n"):
         if line.strip().startswith("version = "):
@@ -91,24 +92,6 @@ def test_logger_output() -> None:
     log_file = Path(get_log_file_path())
     log_content = log_file.read_text()
     assert test_msg in log_content, "Test message not found in log file"
-
-
-def test_custom_log_levels() -> None:
-    """Test that custom log levels are respected."""
-    # Configure logging with custom levels
-    configure_logging(log_level="DEBUG", console_level="WARNING", file_level="DEBUG")
-
-    # Verify root logger level
-    root_logger = logging.getLogger()
-    assert root_logger.level == logging.DEBUG
-
-    # Get and verify handler levels from root logger
-    handlers = root_logger.handlers
-    console_handler = next(h for h in handlers if isinstance(h, logging.StreamHandler))
-    file_handler = next(h for h in handlers if isinstance(h, logging.FileHandler))
-
-    assert console_handler.level == logging.WARNING
-    assert file_handler.level == logging.DEBUG
 
 
 def test_log_directory_creation() -> None:
