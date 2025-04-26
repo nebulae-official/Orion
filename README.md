@@ -1,6 +1,6 @@
 # ✨ Nebula Orion: A Powerful Python Toolkit
 
-[![Python Version](https://img.shields.io/badge/python-3.9%2B-blue.svg)](https://www.python.org/downloads/)
+[![Python Version](https://img.shields.io/badge/python-3.12%2B-blue.svg)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Build Status](https://img.shields.io/badge/build-passing-brightgreen.svg)]()
 [![Documentation Status](https://img.shields.io/badge/docs-latest-blue.svg)]()
@@ -63,51 +63,64 @@ make install
 ### Using the Betelgeuse Module
 
 ```python
-from nebula_orion.betelgeuse import NotionClient
+from __future__ import annotations
 
-# Initialize the client with your Notion integration token
-notion = NotionClient(auth_token="secret_...")
+import os
+import logging # Import standard logging
+from nebula_orion import setup_logging, get_logger, constants
+from nebula_orion.betelgeuse import NotionClient, AuthenticationError, NotionAPIError
 
-# Query a database with filtering and sorting
-results = notion.databases.query(
-    database_id="database-id",
-    filter={
-        "property": "Status",
-        "select": {
-            "equals": "In Progress"
-        }
-    },
-    sorts=[
-        {
-            "property": "Due Date",
-            "direction": "ascending"
-        }
-    ]
-)
+# --- Setup Logging (Optional but Recommended) ---
+# Configure logging to see output (e.g., INFO level to console)
+setup_logging(level=logging.INFO, log_to_file=False) # Disable file for quick start
+log = get_logger("quickstart")
 
-# Process results
-for page in results:
-    print(f"Task: {page.get_title()}")
+# --- Get Notion Token ---
+# Best practice: Use environment variables
+# Ensure NOTION_API_TOKEN is set in your environment
+# export NOTION_API_TOKEN="secret_YOUR_TOKEN_HERE"
+# Or, less securely, define it directly:
+# NOTION_TOKEN = "secret_YOUR_TOKEN_HERE"
+NOTION_TOKEN = os.getenv("NOTION_API_TOKEN")
 
-    # Update a page
-    notion.pages.update(
-        page_id=page.id,
-        properties={
-            "Status": {"select": {"name": "In Review"}}
-        }
-    )
+if not NOTION_TOKEN:
+    log.error("Error: NOTION_API_TOKEN environment variable not set.")
+    exit()
 
-# Create a new page with structured content
-from nebula_orion.betelgeuse.builders import PageBuilder
+# --- Initialize the Client ---
+log.info("Initializing NotionClient...")
+try:
+    # Pass the token directly (or omit if only using env var)
+    notion_client = NotionClient(auth_token=NOTION_TOKEN)
+    log.info(f"Client Initialized: {notion_client!r}")
+except AuthenticationError as e:
+    log.error(f"Authentication failed: {e}")
+    exit()
+except Exception as e:
+    log.error(f"Unexpected error during initialization: {e}", exc_info=True)
+    exit()
 
-builder = PageBuilder(parent={"database_id": "database-id"})
-builder.add_title("Weekly Report")
-builder.add_property("Status", "In Progress")
-builder.add_heading_1("Summary")
-builder.add_paragraph("This week we accomplished several key objectives...")
-builder.add_todo("Follow up with team", checked=False)
+# --- Make a Basic API Call (Iteration 1 - Low Level) ---
+# High-level methods like retrieve_page are not yet implemented.
+# We access the internal _api_client to make a raw request for demonstration.
+log.info("Making a test API call (GET /v1/users/me)...")
+try:
+    # Access internal client - Note: This might change in future versions!
+    api_client = notion_client._api_client # type: ignore[attr-defined]
 
-page = notion.pages.create_from_builder(builder)
+    # GET /v1/users/me endpoint retrieves info about the integration's bot user
+    bot_info = api_client.request(method=constants.GET, path="/v1/users/me")
+
+    log.info("API call successful!")
+    # Process the raw dictionary response
+    bot_name = bot_info.get("name", "Unknown Bot")
+    bot_id = bot_info.get("id")
+    log.info(f"Authenticated as bot: '{bot_name}' (ID: {bot_id})")
+
+except NotionAPIError as e:
+    log.error(f"Notion API Error: {e.status_code} - {e.error_code} - {e.message}")
+except Exception as e:
+    log.error(f"An unexpected error occurred during API call: {e}", exc_info=True)
 ```
 
 ## 🌠 Modules
