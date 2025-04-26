@@ -1,4 +1,3 @@
-# src/nebula_orion/betelgeuse/config.py
 from __future__ import annotations
 
 import os

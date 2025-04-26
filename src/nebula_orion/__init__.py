@@ -2,6 +2,10 @@ from __future__ import annotations
 
 import logging
 
+from dotenv import load_dotenv
+
+load_dotenv()  # Load environment variables from .env file if present
+
 # --- Single source of truth for version ---
 __version__ = "0.1.0"
 

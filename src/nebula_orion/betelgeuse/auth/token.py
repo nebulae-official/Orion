@@ -47,20 +47,21 @@ class APITokenAuth:
                 msg,
             )
 
-        # Basic check for token format (internal integrations start with 'secret_')
-        if not resolved_token.startswith("secret_"):
+        # Basic check for token format (internal integrations start with 'ntn_')
+        if not resolved_token.startswith("ntn_"):
             log.warning(
-                "Provided token does not start with 'secret_'. Ensure it is a "
+                "Provided token does not start with 'ntn_'. Ensure it is a "
                 "valid Notion Internal Integration Token.",
             )
 
         self._token: str = resolved_token
         log.debug("APITokenAuth initialized successfully.")
 
+    @property
+    def token(self) -> str:
+        """Return the API token used for authentication."""
+        return self._token
+
     def get_auth_headers(self) -> dict[str, str]:
         """Return the necessary headers for API token authentication."""
         return {"Authorization": f"Bearer {self._token}"}
-
-    def get_token(self) -> str:
-        """Return the API token used for authentication."""
-        return self._token

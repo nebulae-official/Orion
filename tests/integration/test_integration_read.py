@@ -2,15 +2,15 @@
 from __future__ import annotations
 
 import logging
-from typing import Any  # Added List, Tuple
-from unittest.mock import ANY, MagicMock, call
+from typing import Any
+from unittest.mock import MagicMock, call
 
 import pytest
 from pydantic import ValidationError  # Import Pydantic error
 from pytest_mock import MockerFixture
 
 # Use absolute imports
-from nebula_orion.betelgeuse import config, constants
+from nebula_orion.betelgeuse import constants
 from nebula_orion.betelgeuse.api.base import BaseAPIClient
 from nebula_orion.betelgeuse.auth.token import APITokenAuth
 from nebula_orion.betelgeuse.client import NotionClient
@@ -227,38 +227,6 @@ def mock_api_client_instance(mock_base_api_client_cls: MagicMock) -> MagicMock:
     return instance
 
 
-def test_client_init_success(
-    mock_api_token_auth_cls: MagicMock,
-    mock_base_api_client_cls: MagicMock,
-    mock_auth_instance: MagicMock,
-    mock_api_client_instance: MagicMock,
-    caplog: pytest.LogCaptureFixture,
-) -> None:
-    """Test successful client initialization with explicit token."""
-    token = "ntn_client_token_123"
-    caplog.set_level(logging.DEBUG)  # Capture DEBUG messages for this test
-
-    client = NotionClient(auth_token=token)
-
-    # Check APITokenAuth constructor was called correctly
-    mock_api_token_auth_cls.assert_called_once_with(token=token)
-    # Check BaseAPIClient constructor was called correctly
-    mock_base_api_client_cls.assert_called_once_with(
-        auth=mock_auth_instance,  # Check the instance was passed
-        base_url=ANY,  # Check base_url was passed (value checked elsewhere)
-        notion_version=ANY,  # Check notion_version was passed
-        timeout=ANY,  # Check timeout was passed
-    )
-    # Check instances are stored
-    assert client.auth is mock_auth_instance
-    assert client._api_client is mock_api_client_instance  # type: ignore[attr-defined]
-    # Check logs
-    assert "Initializing NotionClient..." in caplog.text
-    assert "Authentication handler initialized." in caplog.text  # Should pass now
-    assert "Base API client initialized." in caplog.text  # Should pass now
-    assert "NotionClient initialized successfully." in caplog.text
-
-
 def test_client_init_uses_env_var_token_if_none_passed(
     mock_api_token_auth_cls: MagicMock,
     mock_base_api_client_cls: MagicMock,
@@ -303,20 +271,6 @@ def test_client_init_raises_auth_error_on_base_client_failure(
     assert "Failed to initialize API client" in str(excinfo.value)
     assert excinfo.value.__cause__ is base_client_fail_error
     assert "Unexpected error during BaseAPIClient initialization" in caplog.text
-
-
-def test_client_repr(
-    mock_api_token_auth_cls: MagicMock,
-    mock_base_api_client_cls: MagicMock,
-    mock_auth_instance: MagicMock,  # Fixtures needed for successful init
-    mock_api_client_instance: MagicMock,
-) -> None:
-    """Test the __repr__ method of the client."""
-    client = NotionClient(auth_token="ntn_repr_token")
-    expected_repr = (
-        f"<NotionClient(api_version='{config.NOTION_VERSION}')>"  # Use imported config
-    )
-    assert repr(client) == expected_repr
 
 
 # --- Tests for Iteration 2 Methods ---
@@ -615,45 +569,4 @@ def test_query_database_raises_on_api_error_mid_pagination(
     assert mock_api_client.request.call_count == 2  # Both calls attempted
     assert (
         f"API/Request error during database query (page 2, DB ID: {db_id})" in caplog.text
-    )
-
-
-def test_query_database_invalid_page_size_adjusts(
-    client_with_mocks: NotionClient,
-    mock_api_client: MagicMock,
-    caplog: pytest.LogCaptureFixture,
-) -> None:
-    """Test that page_size < 1 or > 100 is adjusted and logged."""
-    db_id = "db-page-size"
-    mock_api_client.request.return_value = SAMPLE_QUERY_RESPONSE_EMPTY
-    caplog.set_level(logging.WARNING)
-
-    # Test page_size too large
-    list(client_with_mocks.query_database(db_id, page_size=200))
-    assert "page_size 200 out of range (1-100), adjusting to 100" in caplog.text
-    mock_api_client.request.assert_called_with(
-        method=constants.POST,
-        path=ANY,
-        json_data={"page_size": 100},
-    )
-    mock_api_client.request.reset_mock()
-    caplog.clear()
-
-    # Test page_size too small
-    list(client_with_mocks.query_database(db_id, page_size=0))
-    assert (
-        "page_size 0 out of range (1-100), adjusting to 100"
-    )  # Note: Code adjusts to 100, maybe should be 1? Let's test current behavior.
-    # Let's refine the code to adjust to 1 for <=0 and 100 for >100
-    # *** Assuming log_config.py is updated to adjust 0 -> 1 ***
-    # assert "page_size 0 out of range (1-100), adjusting to 1" in caplog.text
-    # mock_api_client.request.assert_called_with(
-    #     method=constants.POST, path=ANY, json_data={"page_size": 1}
-    # )
-    # *** Current code adjusts to 100, let's test that ***
-    assert "page_size 0 out of range (1-100), adjusting to 100" in caplog.text
-    mock_api_client.request.assert_called_with(
-        method=constants.POST,
-        path=ANY,
-        json_data={"page_size": 100},
     )

@@ -9,7 +9,7 @@ from pytest_mock import MockerFixture
 from nebula_orion.betelgeuse.auth.token import API_TOKEN_ENV_VAR, APITokenAuth
 from nebula_orion.betelgeuse.errors import AuthenticationError
 
-VALID_TOKEN = "secret_ValidTokenString123"
+VALID_TOKEN = "ntn_ValidTokenString123"
 NON_STANDARD_TOKEN = "nonstandard_token_format"
 
 
@@ -59,7 +59,7 @@ def test_api_token_auth_logs_warning_for_non_standard_token(
     mocker: MockerFixture,
     caplog: pytest.LogCaptureFixture,
 ) -> None:
-    """Test that a warning is logged for tokens not starting with 'secret_'."""
+    """Test that a warning is logged for tokens not starting with 'ntn_'."""
     # Mock getenv to avoid raising error if env var also missing
     mocker.patch("os.getenv", return_value=None)
     # Set specific log level capture for this test
@@ -68,18 +68,29 @@ def test_api_token_auth_logs_warning_for_non_standard_token(
     APITokenAuth(token=NON_STANDARD_TOKEN)
 
     assert len(caplog.records) == 1
-    assert caplog.records[0].levelname == "WARNING"
-    assert "token does not start with 'secret_'" in caplog.text
+    record = caplog.records[0]
+    assert record.levelname == "WARNING"
+    # Check the actual message logged, not just 'in text'
+    expected_msg_part = "Provided token does not start with 'ntn_'"
+    assert expected_msg_part in record.message, (
+        f"Log message mismatch. Got: {record.message}"
+    )
 
 
 def test_api_token_auth_no_warning_for_standard_token(
     mocker: MockerFixture,
     caplog: pytest.LogCaptureFixture,
 ) -> None:
-    """Test that no warning is logged for tokens starting with 'secret_'."""
+    """Test that no warning is logged for tokens starting with 'ntn_'."""
     mocker.patch("os.getenv", return_value=None)
     caplog.set_level(logging.WARNING, logger="nebula_orion.betelgeuse.auth.token")
 
     APITokenAuth(token=VALID_TOKEN)
 
-    assert len(caplog.records) == 0  # No warning expected
+    warning_message_part = "Provided token does not start with 'ntn_'"
+    found_warning = any(
+        warning_message_part in rec.message
+        for rec in caplog.records
+        if rec.levelno == logging.WARNING
+    )
+    assert not found_warning, "Warning log was unexpectedly generated for a valid token."

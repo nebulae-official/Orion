@@ -30,7 +30,7 @@ except ImportError as e:
 
 # --- Configuration ---
 # Set desired log level for manual test (e.g., DEBUG)
-LOG_LEVEL = "INFO"
+LOG_LEVEL = "DEBUG"
 # Option 1: Set token directly here (replace None) - KEEP SECRET
 EXPLICIT_TOKEN: str | None = None
 # Option 2: Rely on environment variable (recommended)

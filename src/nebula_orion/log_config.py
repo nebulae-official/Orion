@@ -13,7 +13,7 @@ import coloredlogs
 LOGGER_NAME = "nebula_orion"
 
 # Define default log formats
-CONSOLE_LOG_FORMAT = "%(levelname)s %(message)s"
+CONSOLE_LOG_FORMAT = "%(message)s"
 FILE_LOG_FORMAT = (
     "%(asctime)s - %(name)s - %(levelname)s - %(module)s:%(lineno)d - %(message)s"
 )

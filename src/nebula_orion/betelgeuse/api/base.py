@@ -107,7 +107,6 @@ class BaseAPIClient:
         if json_data:
             # Avoid logging sensitive data in request body unless DEBUG level is very verbose
             log.debug("Request Body Keys: %s", list(json_data.keys()))
-
         try:
             response: requests.Response = self._session.request(
                 method=method,
