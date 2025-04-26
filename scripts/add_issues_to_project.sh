@@ -15,3 +15,9 @@ done
 
 # Remove projects
 gh project delete 2 --owner nebulae-official
+
+# Remove all issues from Repository
+gh issue list --repo nebulae-official/Orion --label betelgeuse --json number --jq '.[].number' | while read -r ISSUE; do
+  gh issue close "$ISSUE" --repo nebulae-official/Orion
+  echo "Closed issue #$ISSUE."
+done

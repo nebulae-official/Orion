@@ -1,84 +1,178 @@
 {
+  // -------------------------------------
+  // Python Interpreter & Analysis
+  // -------------------------------------
+  // Sets the interpreter for the workspace. Adjust path if needed.
+  "python.defaultInterpreterPath": "${workspaceFolder}/.venv/bin/python", // Linux/macOS path
+  // Use this for Windows:
+  // "python.defaultInterpreterPath": "${workspaceFolder}\\.venv\\Scripts\\python.exe",
+
+  // Enable strict type checking (good for finding type errors early)
+  "python.analysis.typeCheckingMode": "strict",
+
+  // Help Python analysis tools find modules in 'src' and 'tests'
+  "python.analysis.extraPaths": [
+      "./src",
+      "./tests"
+  ],
+
+  // -------------------------------------
+  // Ruff Linting & Formatting
+  // -------------------------------------
+  // Set Ruff as the default formatter for Python files
+  "[python]": {
+      "editor.defaultFormatter": "charliermarsh.ruff",
+      "editor.formatOnSave": true // Format automatically when you save
+  },
+
+  // Run Ruff's fixers and import organization on save
+  "editor.codeActionsOnSave": {
+      "source.fixAll": "explicit",
+      "source.organizeImports": "explicit"
+  },
+
+  // -------------------------------------
+  // Testing with Pytest
+  // -------------------------------------
+  // Enable pytest for the Test Explorer UI
+  "python.testing.pytestEnabled": true,
+  // Disable the built-in unittest runner
+  "python.testing.unittestEnabled": false,
+  // Tell pytest where to find tests (relative to workspace root)
+  "python.testing.pytestArgs": [
+      "tests"
+      // Add other default args like "-v" or "-s" if desired
+  ],
+
+  // -------------------------------------
+  // Editor & File Settings
+  // -------------------------------------
+  // Format on save (redundant if set under [python], but harmless globally)
+  "editor.formatOnSave": true,
+  // Show a ruler at the line length defined in pyproject.toml (90)
+  "editor.rulers": [
+      90
+  ],
+  // Automatically trim trailing whitespace on save
+  "files.trimTrailingWhitespace": true,
+  // Ensure files end with a single newline character
+  "files.insertFinalNewline": true,
+  // Hide common generated/system folders from the file explorer
+  "files.exclude": {
+      "**/.git": true,
+      "**/.svn": true,
+      "**/.hg": true,
+      "**/CVS": true,
+      "**/.DS_Store": true,
+      "**/Thumbs.db": true,
+      "**/.venv": true,
+      "**/__pycache__": true,
+      "**/.pytest_cache": true,
+      "**/.ruff_cache": true,
+      "**/dist": true,
+      "**/build": true,
+      "**/*.egg-info": true
+  },
+
+  // -------------------------------------
+  // GitHub Copilot Instructions
+  // -------------------------------------
   "github.copilot.chat.codeGeneration.instructions": [
-    {
-      "text": "Let your code flow like a well-crafted sonnet: follow PEP8, use meaningful names, and adorn each function with clear, Google-style docstrings."
-    },
-    {
-      "text": "Sprinkle type hints generously so every parameter and return value shines with clarity - use inbuilt types and make sure to follow ruff's type hinting rules."
-    },
-    {
-      "text": "Keep functions focused and modules small; let each piece of your code sing its own verse in the library's epic."
-    },
-    {
-      "text": "Follow Nebula Orion's architecture - focus on clean integration with the Notion API through the Betelgeuse module."
-    }
+      {
+          "text": "Generate clear, simple Python 3.12 code following PEP 8 and Nebula Orion's architecture (using the `betelgeuse` module for Notion)."
+      },
+      {
+          "text": "Use absolute imports relative to the `nebula_orion` package root (assuming `src` layout)."
+      },
+      {
+          "text": "Strictly adhere to the Ruff configuration in `pyproject.toml`. Add `from __future__ import annotations` to the top of files."
+      },
+      {
+          "text": "Implement comprehensive type hints for all parameters and return values, compatible with Ruff's `ANN` rules and Python 3.12+ features."
+      },
+      {
+          "text": "For data models (Iteration 2 onwards), use Pydantic `BaseModel` with appropriate field types, validation, and `Config(extra='ignore')`."
+      },
+      {
+          "text": "Include concise Google-style docstrings explaining purpose, args, returns, and potentially raised errors."
+      },
+      {
+          "text": "Keep functions focused (low complexity) and modules cohesive."
+      }
   ],
   "github.copilot.chat.testGeneration.instructions": [
-    {
-      "text": "Generate tests with pytest as your loyal partner, covering both common cases and quirky edge scenarios."
-    },
-    {
-      "text": "Organize tests using fixtures to maintain elegance and modularity—like verses in a well-structured poem."
-    },
-    {
-      "text": "Celebrate functionality and graceful error handling in every test to ensure your library remains resilient."
-    },
-    {
-      "text": "Ensure test coverage for Notion API interactions, with appropriate mocks for external services."
-    }
+      {
+          "text": "Generate Python tests using `pytest`."
+      },
+      {
+          "text": "Write unit tests covering function logic, common cases, edge cases, and error handling. Use mocking (`unittest.mock` or `pytest-mock`) for external dependencies like API calls (`BaseAPIClient.request`). Ensure mocks verify call arguments."
+      },
+      {
+          "text": "Use `pytest` fixtures for setup code (e.g., mock data as dictionaries, Pydantic model instances, client instances with mocks)."
+      },
+      {
+          "text": "Where appropriate, generate integration tests (marked with `@pytest.mark.integration`) that interact with the actual Notion API (note that sensitive info like tokens must be handled via environment variables)."
+      },
+      {
+          "text": "After generating unit/integration tests, provide steps for a corresponding manual test script."
+      }
   ],
   "github.copilot.chat.reviewSelection.instructions": [
-    {
-      "text": "Review code as if critiquing a masterpiece: check for PEP8 compliance, consistent naming, clear docstrings, and thoughtful error handling."
-    },
-    {
-      "text": "Ensure each function is both performant and graceful, like a well-choreographed dance."
-    },
-    {
-      "text": "Confirm that type annotations are not mere decoration but insightful hints to the code's true intent."
-    },
-    {
-      "text": "Verify compatibility with Notion's API patterns and data structures to maintain harmony in the integration."
-    }
+      {
+          "text": "Review code for compliance with PEP 8 and the project's specific Ruff configuration (`pyproject.toml`)."
+      },
+      {
+          "text": "Verify clarity, simplicity, and correctness of logic. Check for potential bugs (using `flake8-bugbear` knowledge)."
+      },
+      {
+          "text": "Ensure type hints are accurate, complete, and pass Ruff `ANN` checks using modern Python 3.12 syntax."
+      },
+      {
+          "text": "Check for correct Pydantic model usage (Iteration 2+), including validation and configuration."
+      },
+      {
+          "text": "Confirm use of absolute imports (relative to `nebula_orion` root)."
+      },
+      {
+          "text": "Evaluate error handling: Are specific custom exceptions (`NotionAPIError`, `BetelgeuseError`, etc.) used correctly? Are external errors handled gracefully?"
+      },
+      {
+          "text": "Ensure Google-style docstrings are present, accurate, and explain parameters/return values."
+      }
   ],
+  // Keep your existing Commit Message and Pull Request instructions - they are excellent!
   "github.copilot.chat.commitMessageGeneration.instructions": [
-    {
-      "text": "Craft commit messages as concise, commanding verses in the imperative mood, each prefixed with an appropriate emoji (e.g., '✨ Add', '🐛 Fix', '♻️ Refactor')."
-    },
-    {
-      "text": "Use these emoji categories: ✨ (new feature), 🐛 (bugfix), 📚 (documentation), ♻️ (refactor), 🧪 (tests), 🔧 (configuration), 🚀 (performance), 🎨 (style), 🔒 (security)."
-    },
-    {
-      "text": "Include the module name in parentheses, followed by the change description: '✨ feat(betelgeuse): Add page builder API'."
-    },
-    {
-      "text": "For complex changes, write a short summary line followed by a blank line and detailed explanation in the body."
-    }
+      {
+          "text": "Craft commit messages as concise, commanding verses in the imperative mood, each prefixed with an appropriate emoji (e.g., '✨ Add', '🐛 Fix', '♻️ Refactor')."
+      },
+      {
+          "text": "Use these emoji categories: ✨ (new feature), 🐛 (bugfix), 📚 (documentation), ♻️ (refactor), 🧪 (tests), 🔧 (configuration), 🚀 (performance), 🎨 (style), 🔒 (security)."
+      },
+      {
+          "text": "Include the module name in parentheses, followed by the change description: '✨ feat(betelgeuse): Add page builder API'."
+      },
+      {
+          "text": "For complex changes, write a short summary line followed by a blank line and detailed explanation in the body."
+      }
   ],
   "github.copilot.chat.pullRequestDescriptionGeneration.instructions": [
-    {
-      "text": "Create pull request titles as crisp as a haiku—succinct yet expressive of the core change."
-    },
-    {
-      "text": "Weave a compelling narrative in your pull request description that provides context, impact, and relevant details."
-    },
-    {
-      "text": "Highlight key changes made in the code, linking back to the issue for deeper understanding."
-    },
-    {
-      "text": "Include a checklist with testing steps, documentation updates, and any migration notes for Notion API changes."
-    }
+      {
+          "text": "Create pull request titles as crisp as a haiku—succinct yet expressive of the core change."
+      },
+      {
+          "text": "Weave a compelling narrative in your pull request description that provides context, impact, and relevant details."
+      },
+      {
+          "text": "Highlight key changes made in the code, linking back to the issue for deeper understanding."
+      },
+      {
+          "text": "Include a checklist with testing steps, documentation updates, and any migration notes for Notion API changes."
+      }
   ],
-  "editor.formatOnSave": true,
-  "python.analysis.typeCheckingMode": "strict",
-  "python.analysis.extraPaths": [
-    "./src"
-  ],
-  "postman.settings.dotenv-detection-notification-visibility": false,
-  "python.testing.pytestArgs": [
-    "tests"
-  ],
-  "python.testing.unittestEnabled": false,
-  "python.testing.pytestEnabled": true,
+
+  // -------------------------------------
+  // Other Extension Settings (Keep yours)
+  // -------------------------------------
+  "postman.settings.dotenv-detection-notification-visibility": false
 
 }
