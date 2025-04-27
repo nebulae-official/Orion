@@ -2,7 +2,7 @@
 
 [![Python Version](https://img.shields.io/badge/python-3.12%2B-blue.svg)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Build Status](https://img.shields.io/badge/build-passing-brightgreen.svg)]() [![Documentation Status](https://img.shields.io/badge/docs-in_progress-blue.svg)]() [![PyPI version](https://img.shields.io/badge/pypi-coming_soon-orange.svg)]() [![Code Style: Ruff](https://img.shields.io/badge/code%20style-ruff-000000.svg)](https://github.com/astral-sh/ruff)
+[![Build Status](https://img.shields.io/badge/build-passing-brightgreen.svg)]() [![Tests Passing](https://img.shields.io/badge/tests-passing-brightgreen.svg)]() [![Documentation Status](https://img.shields.io/badge/docs-in_progress-blue.svg)]() [![PyPI version](https://img.shields.io/badge/pypi-coming_soon-orange.svg)]() [![Code Style: Ruff](https://img.shields.io/badge/code%20style-ruff-000000.svg)](https://github.com/astral-sh/ruff)
 
 > 🌌 Nebula Orion is a constellation of powerful Python modules for advanced productivity and workspace management, with Betelgeuse serving as its first and brightest star for comprehensive Notion integration.
 
@@ -10,7 +10,7 @@
 
 - [✨ Features](#-features)
 - [🛠️ Installation](#️-installation)
-- [🚀 Quick Start (Iteration 2)](#-quick-start-iteration-2)
+- [🚀 Quick Start (Iteration 3)](#-quick-start-iteration-3)
 - [🌠 Modules](#-modules)
 - [📖 Documentation](#-documentation)
 - [🤝 Contributing](#-contributing)
@@ -21,20 +21,22 @@
 
 Nebula Orion is built as a modular ecosystem. The first available module is **Betelgeuse**:
 
-- 🔴 **Betelgeuse** - Notion API Integration (Reading Pages/Databases)
-  - Core client (`NotionClient`) for initializing connection to the Notion API.
-  - Handles API Token authentication (direct or via `NOTION_API_TOKEN` env var).
-  - Provides a base API request layer (`BaseAPIClient`) using `requests`.
-  - Includes custom exception classes (`NotionAPIError`, `NotionRequestError`, `AuthenticationError`, `BetelgeuseError`).
+- 🔴 **Betelgeuse** - Notion API Integration (Reading Blocks)
+  - Core client (`NotionClient`) for initializing connection.
+  - API Token authentication (direct or `NOTION_API_TOKEN` env var).
+  - Base API request layer (`BaseAPIClient`) using `requests`.
+  - Custom exception classes (`NotionAPIError`, `BetelgeuseError`, etc.).
   - Configurable via environment variables.
   - Centralized logging setup (`nebula_orion.setup_logging`).
-  - **New:** Pydantic models (`Page`, `Database`, `BaseObjectModel`) for parsing and validating API responses.
-  - **New:** High-level methods for reading data:
-      - `NotionClient.retrieve_page(page_id)`
-      - `NotionClient.retrieve_database(database_id)`
-      - `NotionClient.query_database(...)` with automatic pagination handling.
+  - Pydantic models for core objects (`Page`, `Database`, `Block`, `User`, `RichText`, `FileObject`, etc.).
+  - High-level methods for reading data:
+      - `retrieve_page(page_id)`
+      - `retrieve_database(database_id)`
+      - `query_database(...)` with pagination.
+  - **New:** `retrieve_block_children(block_id)` method with pagination.
+  - **New:** Parsing of common block types (Paragraph, Headings, ToDo, Lists, Quote, Callout, Toggle) into specific Pydantic models. Falls back gracefully to base `Block` model for unsupported types.
 
-*(Features like reading blocks, creating/updating content, builders, sync, OAuth etc., are planned for future iterations).*
+*(Features like reading *all* block types, creating/updating content, builders, sync, OAuth etc., are planned for future iterations).*
 
 ## 🛠️ Installation
 
@@ -67,9 +69,9 @@ pip install nebula-orion
     pip install -e .[dev]
     ```
 
-## 🚀 Quick Start (Iteration 2)
+## 🚀 Quick Start (Iteration 3)
 
-This demonstrates initializing the client and using the new high-level methods to read data.
+This demonstrates initializing the client and using methods to read pages, databases, and block children.
 
 ```python
 from __future__ import annotations
@@ -78,22 +80,25 @@ import os
 import logging
 from nebula_orion import setup_logging, get_logger
 from nebula_orion.betelgeuse import (
-    NotionClient, AuthenticationError, NotionAPIError, Page, Database
+    NotionClient, AuthenticationError, NotionAPIError, Page, Database, Block
 )
+# Import specific block types if you want to check for them
+from nebula_orion.betelgeuse.blocks import ParagraphBlock, Heading1Block
 
 # --- Setup Logging ---
 setup_logging(level=logging.INFO, log_to_file=False)
-log = get_logger("quickstart_iter2")
+log = get_logger("quickstart_iter3")
 
 # --- Get Notion Token & IDs ---
 # Ensure these are set in your environment or replace placeholders
 NOTION_TOKEN = os.getenv("NOTION_API_TOKEN")
 DATABASE_ID = os.getenv("TEST_NOTION_DATABASE_ID", "YOUR_DATABASE_ID_HERE")
-PAGE_ID = os.getenv("TEST_NOTION_PAGE_ID", "YOUR_PAGE_ID_HERE")
+# Use a Page ID known to have child blocks for the block test
+PARENT_BLOCK_ID = os.getenv("TEST_NOTION_PARENT_BLOCK_ID", "YOUR_PAGE_OR_BLOCK_ID_WITH_CHILDREN")
 
-if not NOTION_TOKEN or "YOUR_" in DATABASE_ID or "YOUR_" in PAGE_ID:
+if not NOTION_TOKEN or "YOUR_" in DATABASE_ID or "YOUR_" in PARENT_BLOCK_ID:
     log.error("Error: Required environment variables (NOTION_API_TOKEN, "
-              "TEST_NOTION_DATABASE_ID, TEST_NOTION_PAGE_ID) not set.")
+              "TEST_NOTION_DATABASE_ID, TEST_NOTION_PARENT_BLOCK_ID) not set.")
     exit()
 
 # --- Initialize the Client ---
@@ -101,55 +106,50 @@ log.info("Initializing NotionClient...")
 try:
     client = NotionClient(auth_token=NOTION_TOKEN)
     log.info(f"Client Initialized: {client!r}")
-except AuthenticationError as e:
-    log.error(f"Authentication failed: {e}")
+except Exception as e:
+    log.error(f"Initialization failed: {e}", exc_info=True)
     exit()
 
-# --- Retrieve a Specific Database ---
-log.info(f"Retrieving database: {DATABASE_ID}")
+# --- Example: Retrieve a Database ---
 try:
     db: Database = client.retrieve_database(DATABASE_ID)
-    log.info(f"Successfully retrieved database: '{db.get_title()}' (ID: {db.id})")
-    log.info(f"  Number of properties defined: {len(db.properties)}")
+    log.info(f"Retrieved database: '{db.get_title()}'")
 except Exception as e:
-    log.error(f"Failed to retrieve database: {e}", exc_info=True)
+    log.error(f"Failed to retrieve database: {e}")
 
-# --- Retrieve a Specific Page ---
-log.info(f"Retrieving page: {PAGE_ID}")
+# --- Example: Query Database Pages ---
+log.info(f"Querying database {DATABASE_ID}...")
 try:
-    page: Page = client.retrieve_page(PAGE_ID)
-    log.info(f"Successfully retrieved page: '{page.get_title()}' (ID: {page.id})")
-    log.info(f"  Parent: {page.parent}")
-except Exception as e:
-    log.error(f"Failed to retrieve page: {e}", exc_info=True)
-
-# --- Query a Database (Get first few pages) ---
-log.info(f"Querying database {DATABASE_ID} for pages...")
-try:
-    count = 0
-    max_results_to_show = 5
-    # Example: Query with a simple sort (adjust property name if needed)
-    sort_criteria = [{"property": "Name", "direction": "ascending"}] # Optional sort
-    page_iterator = client.query_database(
-        DATABASE_ID,
-        sorts_data=sort_criteria,
-        page_size=5 # Fetch small pages for demo
-    )
-
-    log.info("Iterating through query results:")
-    for result_page in page_iterator:
-        count += 1
-        log.info(f"  - Result {count}: '{result_page.get_title()}' (ID: {result_page.id})")
-        if count >= max_results_to_show:
-            log.info(f"  (Stopping after showing {max_results_to_show} results)")
+    page_count = 0
+    for page in client.query_database(DATABASE_ID, page_size=3):
+        page_count += 1
+        log.info(f"  Found page {page_count}: '{page.get_title()}' (ID: {page.id})")
+        if page_count >= 3: # Limit results for demo
             break
-
-    if count == 0:
-        log.warning("  Query returned 0 results. Is the database populated?")
-    log.info("Database query finished.")
-
+    log.info(f"Query finished. Showed first {page_count} pages.")
 except Exception as e:
-    log.error(f"Failed during database query: {e}", exc_info=True)
+    log.error(f"Database query failed: {e}")
+
+# --- Example: Retrieve Block Children ---
+log.info(f"Retrieving children for block/page: {PARENT_BLOCK_ID}")
+try:
+    block_count = 0
+    for block in client.retrieve_block_children(PARENT_BLOCK_ID, page_size=5):
+        block_count += 1
+        log.info(f"  Found child block {block_count}: Type='{block.type}', ID='{block.id}'")
+        # Example of checking specific block type content
+        if isinstance(block, ParagraphBlock):
+            text_content = "".join(rt.plain_text for rt in block.paragraph.rich_text)
+            log.info(f"    -> Paragraph Text: '{text_content[:50]}...'")
+        elif isinstance(block, Heading1Block):
+            text_content = "".join(rt.plain_text for rt in block.heading_1.rich_text)
+            log.info(f"    -> Heading 1 Text: '{text_content[:50]}...'")
+
+        if block_count >= 5: # Limit results for demo
+            break
+    log.info(f"Block retrieval finished. Showed first {block_count} child blocks.")
+except Exception as e:
+    log.error(f"Retrieving block children failed: {e}")
 
 ```
 
@@ -159,8 +159,8 @@ Nebula Orion is designed as a constellation of specialized modules:
 
 ### Current Modules
 
-- **🔴 Betelgeuse** - Notion API Integration (Reading API)
-  - Provides core client setup, authentication, Pydantic models, and methods for reading Notion Pages and Databases.
+- **🔴 Betelgeuse** - Notion API Integration (Core Read API)
+  - Provides client setup, authentication, Pydantic models, and methods for reading Notion Pages, Databases, and Block Children.
 
 ### Upcoming Modules
 
@@ -204,14 +204,14 @@ Our project uses an agile methodology with:
 
 ## 🗺️ Roadmap
 
-### Near-term Objectives (Iteration 3 & Beyond)
+### Near-term Objectives (Iteration 4 & Beyond)
 
-- ✨ **Betelgeuse:** Implement reading Block children and parsing common block types.
-- ✨ **Betelgeuse:** Introduce Pydantic models for Blocks and Rich Text components.
 - ✨ **Betelgeuse:** Implement creating and updating Pages.
-- ✨ **Betelgeuse:** Add helper classes/builders for constructing page/block data.
-- 🧪 Enhance test coverage for new features.
-- 📚 Continue building official documentation.
+- ✨ **Betelgeuse:** Implement `PageBuilder` helper class for easier page creation.
+- ✨ **Betelgeuse:** Implement creating and updating Blocks.
+- ✨ **Betelgeuse:** Add Pydantic models for more Block types (media, embeds, lists, etc.).
+- 🧪 Enhance test coverage for write operations and builders.
+- 📚 Expand official documentation with write API guides.
 
 ### Long-term Vision
 
